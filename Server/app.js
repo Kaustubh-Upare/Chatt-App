@@ -64,9 +64,8 @@ io.use((socket,next)=>{
 
 io.on("connection",(socket)=>{
     
-    console.log("okay")
+    // console.log("okay")
     const tempUser=socket.user;
-    // console.log("uip",tempUser)
     
     if (!tempUser || !tempUser._id) {
         console.error("Invalid user. Disconnecting socket:", socket.id);
@@ -74,10 +73,9 @@ io.on("connection",(socket)=>{
         return;
     }
     
+    // console.log(tempUser)
     
-    console.log(tempUser)
-    
-    userSocketIds.set(tempUser._id,socket.id);
+    userSocketIds?.set(tempUser._id.toString(),socket.id);
 
     console.log("okayss",userSocketIds)
     console.log("Socket Connected",socket.id);
@@ -121,11 +119,11 @@ io.on("connection",(socket)=>{
     //     console.log("dissconnected",so);
     //     userSocketIds.delete(user._id);
 })
-socket.on("disconnect",()=>{
+    socket.on("disconnect",()=>{
     console.log("Disconnected", socket.id);
     
     // Ensure _id is converted to string to match the map key format
-    userSocketIds.delete(tempUser._id.toString());
+    userSocketIds.delete(tempUser._id);
     
     console.log("User deleted successfully from userSocketIds");
 

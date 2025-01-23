@@ -7,7 +7,11 @@ const getotherMember=(members,userId)=>(
 console.log(userSocketIds)
 const getSockets = (users = []) => {
    return users
-       .map((user) => userSocketIds.get(user.toString()))
+       .map((user) =>{ 
+         const socketId=userSocketIds.get(user)
+         // console.log(`User: ${user}, Socket ID: ${socketId}`)
+         return socketId
+      })
        .filter((socketId) => socketId); // Filter out undefined values
 };
 

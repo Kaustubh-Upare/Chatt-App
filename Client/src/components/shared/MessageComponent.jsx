@@ -7,7 +7,7 @@ const MessageComponent =({message,user})=>{
 
     const {sender,content,attachments=[],createdAt}=message;
     
-    const sameSender=sender._id===user.data.data;
+    const sameSender=sender._id===user?.data?.data;
     
     return(
         <div

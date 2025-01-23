@@ -9,9 +9,9 @@ import { useDispatch, useSelector } from "react-redux"
 import { setIsMobileMenu } from "../../redux/reducers/misc"
 import { useErrors, useSocketEvents } from "../../hooks/hook"
 import { getSocket } from "../../Socket"
-import { NEW_MSG, NEW_REQUEST } from "../constants/socketevents"
+import { NEW_MSG_ALERT, NEW_REQUEST } from "../constants/socketevents"
 import { useCallback, useEffect } from "react"
-import { incNotifications } from "../../redux/reducers/chat"
+import { incNotifications, setNewMsgsAlert } from "../../redux/reducers/chat"
 
 const AppLayout=()=>WrappedComponent =>{
     return (props)=>{
@@ -19,22 +19,13 @@ const AppLayout=()=>WrappedComponent =>{
        const chatId=params.id;
        
        const socket=getSocket();
-        // useEffect(()=>{
-        //     
-        //     if (!socket) return;
-        //     socket.on('connect', () => {
-        //         console.log(`Connected with socket ID: ${socket.id}`);
-        //     });
-        //     return () => {
-        //         socket.off('connect');
-        //         socket.disconnect();  // Optionally disconnect on unmount
-        //     };
-        // },[socket])
+    
 
         console.log("ok",socket?.id);
        
-
+        const {newMsgAlert} =useSelector((state)=>state.chat);
         const dispatch=useDispatch();
+        console.log("New MSG +1",newMsgAlert)
 
         const {isLoading,data,isError,error,refetch}=useMyChatsQuery("")
         // console.log(data)
@@ -48,10 +39,17 @@ const AppLayout=()=>WrappedComponent =>{
         const newRequestHandler=useCallback(()=>{
             dispatch(incNotifications())
         },[dispatch])
-        const newMsgAlertHandler=useCallback(()=>{},[])
+
+        const newMsgAlertHandler=useCallback((data)=>{
+            
+            if(data.chatId===chatId) return ;
+            dispatch(setNewMsgsAlert(data))
+            const sds=data.chatId;
+            console.log("app alert",sds)
+        },[chatId])
 
         const eventArr={
-            [NEW_MSG]:newMsgAlertHandler,
+            [NEW_MSG_ALERT]:newMsgAlertHandler,
             [NEW_REQUEST]:newRequestHandler    
         }
         useSocketEvents(socket,eventArr)
@@ -65,10 +63,9 @@ const AppLayout=()=>WrappedComponent =>{
                     <Skeleton />
                 ) : (
                 <Drawer open={isMobileMenu} onClose={handleMobileMenu} >
-                    <ChatList  chats={data?.chats} chatId={chatId} newMessagesAlert={[{
-                        chatId,
-                        count:4
-                    }]} onlineUsers={["1","2"]} 
+                    <ChatList  chats={data?.chats} chatId={chatId} 
+                    newMessagesAlert={newMsgAlert} 
+                    onlineUsers={["1","2"]} 
                     />
                 </Drawer>
                     )
@@ -88,10 +85,11 @@ const AppLayout=()=>WrappedComponent =>{
                 {isLoading ? (
                     <Skeleton />
                 ) : (
-                    <ChatList chats={data?.chats} chatId={chatId} newMessagesAlert={[{
-                        chatId,
-                        count:4
-                    }]} onlineUsers={["1","2"]} 
+                    <ChatList 
+                    chats={data?.chats}
+                    chatId={chatId}
+                    newMessagesAlert={newMsgAlert} 
+                    onlineUsers={["1","2"]} 
                     />
                 )}
                 </Grid>

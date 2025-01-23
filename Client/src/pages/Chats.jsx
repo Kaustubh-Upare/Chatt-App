@@ -11,6 +11,7 @@ import { useSocketEvents } from "../hooks/hook";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsFileMenu } from "../redux/reducers/misc";
 import FileMenuAnchor from "../components/dialog/FileMenuAnchor";
+import { removeNewMsgAlert } from "../redux/reducers/chat";
 
 
 const Chats=({chatId})=>{
@@ -29,13 +30,13 @@ const Chats=({chatId})=>{
     const [page,setPage]=useState(1);
     const socket=getSocket();
     useEffect(()=>{
-        console.log("chatList Data",infData)
-        setPage(1);
-        setInfData([])
-        setMessages([]);
-
-        return ()=>console.log("Unmoutting")
-
+        dispatch(removeNewMsgAlert({chatId}))
+       return ()=>{
+            setPage(1);
+            setInfData([])
+            setMessages([]);
+           console.log("Unmoutting")
+        }
     },[chatId])
    
     // console.log("mmm",oldMsgsChunck?.data)
@@ -63,8 +64,9 @@ const Chats=({chatId})=>{
         
     }
     const newMsgHandler=useCallback((data)=>{
+                if(data.chatId !== chatId) return;
                 setMessages((prev)=>[...prev,data.message])
-                },[]); 
+                },[chatId]); 
     
     const eventArr={[NEW_MSG]:newMsgHandler}
     useSocketEvents(socket,eventArr)
