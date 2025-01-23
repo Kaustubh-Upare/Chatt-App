@@ -2,6 +2,7 @@ const jwt =require('jsonwebtoken');
 const cloudinary=require('../Cloudinary/config')
 const { v4: uuid } = require('uuid');
 const { ErrorHandler } = require('./utility');
+const { getSockets } = require('../lib/Helper');
 
 
 const cookieOptions={
@@ -23,6 +24,10 @@ const sendToken=(res,user,code,msg)=>{
 
 const emitEvent=(req,event,users,data)=>{
     console.log("Emitting Event",event);
+    const io=req.app.get("io");
+    const userSocket=getSockets(users);
+    io.to(userSocket).emit(event,data)
+
 }
 
 

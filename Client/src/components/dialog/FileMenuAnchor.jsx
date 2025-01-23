@@ -3,7 +3,7 @@ import { Menu, MenuItem, MenuList } from "@mui/material"
 import { useRef } from "react"
 import toast from "react-hot-toast"
 import { useDispatch, useSelector } from "react-redux"
-import { setUploadingLoader } from "../../redux/reducers/misc"
+import { setIsFileMenu, setUploadingLoader } from "../../redux/reducers/misc"
 import axios from 'axios'
 
 const FileMenuAnchor=({anchorEl,chatId})=>{
@@ -53,7 +53,7 @@ const FileMenuAnchor=({anchorEl,chatId})=>{
 
     return(
         
-        <Menu open={isFileMenu} anchorEl={anchorEl}>
+        <Menu open={isFileMenu} anchorEl={anchorEl} onClose={()=>dispatch(setIsFileMenu(false))}>
             <MenuList >
                 <MenuItem onClick={()=>selectRef(imageRef)}>
                     <ImageIcon /> Images <input type="file" multiple accept="image/png, image/jpg, image/jpeg" 

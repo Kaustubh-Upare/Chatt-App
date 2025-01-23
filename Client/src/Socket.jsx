@@ -1,6 +1,6 @@
-import io from "socket.io-client"
-import { server } from "./components/constants/config"
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef } from "react";
+import io from "socket.io-client";
+import { server } from "./components/constants/config";
 
 const SocketContext=createContext();
 
@@ -10,7 +10,8 @@ const SocketProvider=({children})=>{
     const socket=useMemo(()=>
         io(server,{withCredentials:true})
         ,[])
-    
+   
+
     return(
         <SocketContext.Provider value={socket}>
             {children}
@@ -18,4 +19,4 @@ const SocketProvider=({children})=>{
     )
 }
 
-export {SocketProvider,getSocket};
+export { getSocket, SocketProvider };

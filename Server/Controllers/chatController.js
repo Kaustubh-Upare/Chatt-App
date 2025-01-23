@@ -2,7 +2,7 @@ const { tryCatcher } = require("../Middlewares/error.js");
 const { ErrorHandler } = require("../Util/utility.js");
 const Chat=require('../Models/Chat.js');
 const { emitEvent } = require("../Util/feature.js");
-const { ALERT, REFETCH_CHATS, NEW_ATTACHMENTS, NEW_MSG_ALERT } = require("../constants/events.js");
+const { ALERT, REFETCH_CHATS, NEW_ATTACHMENTS, NEW_MSG_ALERT, NEW_MSG } = require("../constants/events.js");
 const { getotherMember } = require("../lib/Helper.js");
 const User = require("../Models/user.js");
 const Message=require("../Models/Message.js");
@@ -204,7 +204,7 @@ const sendAttachments=tryCatcher(async(req,res,next)=>{
     
     const message=await Message.create(msgForDB)
 
-    emitEvent(req,NEW_ATTACHMENTS,chatu.members,{
+    emitEvent(req,NEW_MSG,chatu.members,{
         message:msgForRealTime,
         chatId
     })

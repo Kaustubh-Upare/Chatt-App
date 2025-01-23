@@ -32,6 +32,8 @@ const io=new Server(server,{
     cors:corsOption
 });
 
+app.set("io",io)
+
 //Socket *************************
 
 
@@ -120,11 +122,22 @@ io.on("connection",(socket)=>{
     //     userSocketIds.delete(user._id);
 })
 socket.on("disconnect",()=>{
-    console.log("dissconnected",socket.id);
+    console.log("Disconnected", socket.id);
+    
+    // Ensure _id is converted to string to match the map key format
     userSocketIds.delete(tempUser._id.toString());
     
-    console.log("User deleted succesfully")
+    console.log("User deleted successfully from userSocketIds");
+
 })
+socket.on("reconnect", () => {
+    console.log(`Socket reconnected: ${socket.id} for user ${tempUser._id}`);
+
+    // Update the socket ID in the map
+    userSocketIds.set(tempUser._id.toString(), socket.id);
+});
+
+
 })
 
 

@@ -1,9 +1,10 @@
-import { AppBar, Backdrop, Box, IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
+import { AppBar, Backdrop, Badge, Box, IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
 import {Bolt,Menu as MenuIcon,Search as SearchIcon,Add as AddIcon,Notifications as NotifyIcon,Group as GroupIcon,Logout as LogoutIcon} from '@mui/icons-material'
 import {useNavigate} from "react-router-dom"
 import { lazy, Suspense, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsMobileMenu, setIsNotifications, setIsSearch, } from "../../redux/reducers/misc";
+import { resetNotification } from "../../redux/reducers/chat";
 
 
 const SearchDialog =lazy(()=> import("../specific/Search"));
@@ -14,7 +15,8 @@ const Header=()=>{
 
     const dispatch=useDispatch();
     const {isMobileMenu,isSearch,isNotifications}=useSelector((state)=> state.misc)
-    
+    const {notificationCount}=useSelector((state)=>state.chat)
+
     // const handleMobileMenu=()=> ;
     
 
@@ -22,16 +24,22 @@ const Header=()=>{
     const [isAddBtn,setisAddBtn]=useState(false);
     const NotificationOpenHandler=()=>{
             dispatch(setIsNotifications(true))
+            dispatch(resetNotification())
         }
     
     
     
-    const IconBtn=({title,icon,onClick})=>{
+    const IconBtn=({title,icon,onClick,value})=>{
+        
         return (
             <Tooltip title={title}>
                 <IconButton size="large" onClick={onClick}>
-                    {icon}
-                </IconButton>
+                    {
+                        {value} ? (<Badge badgeContent={value} color="error">{icon}</Badge>)
+                            :({icon})
+                    }
+                    
+                    </IconButton>
             </Tooltip>
         )
     }
@@ -105,12 +113,14 @@ const Header=()=>{
                     title={"New Group"}
                     icon={<AddIcon />}
                     onClick={AddIconDialog}
+                    
                     ></IconBtn>
 
                     <IconBtn 
                     title={"Notifications"}
                     icon={<NotifyIcon />}
                     onClick={NotificationOpenHandler}
+                    value={notificationCount}
                     ></IconBtn>
                 
                 

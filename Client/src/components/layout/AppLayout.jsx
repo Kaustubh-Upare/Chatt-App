@@ -7,16 +7,31 @@ import Profile from "../specific/Profile"
 import { useMyChatsQuery } from "../../redux/api/api"
 import { useDispatch, useSelector } from "react-redux"
 import { setIsMobileMenu } from "../../redux/reducers/misc"
-import { useErrors } from "../../hooks/hook"
+import { useErrors, useSocketEvents } from "../../hooks/hook"
 import { getSocket } from "../../Socket"
+import { NEW_MSG, NEW_REQUEST } from "../constants/socketevents"
+import { useCallback, useEffect } from "react"
+import { incNotifications } from "../../redux/reducers/chat"
 
 const AppLayout=()=>WrappedComponent =>{
     return (props)=>{
         const params=useParams();
        const chatId=params.id;
        
-        const socket=getSocket();
-        console.log("ok",socket.id);
+       const socket=getSocket();
+        // useEffect(()=>{
+        //     
+        //     if (!socket) return;
+        //     socket.on('connect', () => {
+        //         console.log(`Connected with socket ID: ${socket.id}`);
+        //     });
+        //     return () => {
+        //         socket.off('connect');
+        //         socket.disconnect();  // Optionally disconnect on unmount
+        //     };
+        // },[socket])
+
+        console.log("ok",socket?.id);
        
 
         const dispatch=useDispatch();
@@ -29,6 +44,17 @@ const AppLayout=()=>WrappedComponent =>{
 
         const {isMobileMenu}=useSelector((state)=> state.misc)
         const handleMobileMenu=()=> dispatch(setIsMobileMenu(!isMobileMenu));
+
+        const newRequestHandler=useCallback(()=>{
+            dispatch(incNotifications())
+        },[dispatch])
+        const newMsgAlertHandler=useCallback(()=>{},[])
+
+        const eventArr={
+            [NEW_MSG]:newMsgAlertHandler,
+            [NEW_REQUEST]:newRequestHandler    
+        }
+        useSocketEvents(socket,eventArr)
 
         return (
             <>
