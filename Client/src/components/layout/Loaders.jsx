@@ -1,5 +1,6 @@
 import { Skeleton, Grid, Stack } from "@mui/material";
 import Header from "./Header";
+import { BouncingSkeleton } from "../styled/StyleComponents";
 
 export const LayoutLoaders = () => {
   return (
@@ -42,3 +43,24 @@ export const LayoutLoaders = () => {
     </>
   );
 };
+
+export const TypingLoader=()=>{
+  console.log("tri")
+  return(
+    <Stack
+    spacing={"0.5rem"}
+    direction={"row"}
+    padding={"0.5rem"}
+    justifyContent={"center"}
+    >
+      <BouncingSkeleton varient="circular" width={"7rem"} height={"9rem"} color="primary.main"
+      style={{
+        animationDelay:"0.1s"
+      }}/>
+      <BouncingSkeleton varient="circular" width={"7rem"} height={"9rem"} 
+      style={{
+        animationDelay:"0.4s"
+      }}/>
+    </Stack>
+  )
+}

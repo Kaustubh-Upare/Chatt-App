@@ -13,7 +13,7 @@ const {createServer}=require("http");
 const userRoute=require("./Routes/user.js");
 const chatRoute=require("./Routes/chat.js");
 const adminRoute=require("./Routes/admin.js");
-const { NEW_MSG, NEW_MSG_ALERT } = require("./constants/events.js");
+const { NEW_MSG, NEW_MSG_ALERT, Start_Typing, Stop_Typing } = require("./constants/events.js");
 const user = require("./Models/user.js");
 const { getSockets, userSocketIds } = require("./lib/Helper.js");
 const Message = require("./Models/Message.js");
@@ -119,6 +119,18 @@ io.on("connection",(socket)=>{
     //     console.log("dissconnected",so);
     //     userSocketIds.delete(user._id);
 })
+    socket.on(Start_Typing,({chatId,members})=>{
+        console.log("Typing...")
+        const memSockets=getSockets(members);
+        socket.to(memSockets).emit(Start_Typing,{chatId});
+    })
+    socket.on(Stop_Typing,({chatId,members})=>{
+        console.log("Stopped Typing")
+        const memSockets=getSockets(members);
+        socket.to(memSockets).emit(Stop_Typing,{chatId});
+    })
+
+
     socket.on("disconnect",()=>{
     console.log("Disconnected", socket.id);
     

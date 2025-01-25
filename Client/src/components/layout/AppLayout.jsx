@@ -12,6 +12,7 @@ import { getSocket } from "../../Socket"
 import { NEW_MSG_ALERT, NEW_REQUEST } from "../constants/socketevents"
 import { useCallback, useEffect } from "react"
 import { incNotifications, setNewMsgsAlert } from "../../redux/reducers/chat"
+import { getOrSaveFromLocalStorage } from "../../lib/features"
 
 const AppLayout=()=>WrappedComponent =>{
     return (props)=>{
@@ -31,6 +32,10 @@ const AppLayout=()=>WrappedComponent =>{
         // console.log(data)
 
         useErrors([{isError,error}]);
+        // For locally Storing msg when we reload it will not get removed
+        useEffect(()=>{
+            getOrSaveFromLocalStorage({key:NEW_MSG_ALERT,value:newMsgAlert})
+        },[newMsgAlert])
 
 
         const {isMobileMenu}=useSelector((state)=> state.misc)
