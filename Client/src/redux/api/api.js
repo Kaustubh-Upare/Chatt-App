@@ -1,7 +1,6 @@
 import {createApi,fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 import { server } from '../../components/constants/config';
 
-
 const api=createApi({
     reducerPath:"api",
     baseQuery: fetchBaseQuery({baseUrl:`${server}/`}),
@@ -68,9 +67,39 @@ const api=createApi({
                 }),
                 keepUnusedDataFor:0
             }),
-            
+            myGroups:builder.query({
+                query:()=>({
+                    url:`chat/my/groups`,
+                    credentials:'include'
+                }),
+                providesTags:['Chat']
+            }),
+            availableFriends:builder.query({
+                query:(chatId)=>{
+                   let url=`user/friends`;
+                   if(chatId) url+=`?chatId=${chatId}`
+                    return{
+                        url:url,
+                        credentials:"include"
+                    }
+                },
+                providesTags:['Chat']
+            }),
+            cNewGroup:builder.mutation({
+                query:({name,members})=>({
+                    url:'chat/new',
+                    method:"POST",
+                    credentials:'include',
+                    body:{
+                        name,
+                        members
+                    }
+                }),
+                invalidatesTags:['Chat']
+            })    
 
         })
+        
 })
 
 export default api;
@@ -81,5 +110,5 @@ export const
     useFriendRequestMutation,useGetNotificationsQuery,
     useRequestAccRejMutation,
     useGetChatDetailsQuery,useGetOldMsgsQuery,
-    useSendAttachyMutation
+    useSendAttachyMutation,useMyGroupsQuery,useAvailableFriendsQuery,useCNewGroupMutation
 }=api;

@@ -9,6 +9,7 @@ const Message=require("../Models/Message.js");
 const { uploadToCloudinary } = require("../Cloudinary/config.js");
 
 const newGroupChat=tryCatcher(async(req,res,next)=>{
+    
     const {name,members}=req.body;
 
     if(members.length<2) return next(new ErrorHandler("Group Chat must have atleast 2 members",400));

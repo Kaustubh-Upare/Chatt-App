@@ -2,6 +2,8 @@ const {body,validationResult} =require('express-validator');
 const { ErrorHandler } = require('../Util/utility');
 
 const validateHandler=(req,res,next)=>{
+    console.log("validating ....")
+    
     const errors=validationResult(req);
 
     const errorMsgs=errors.array().map((error)=> error.msg).join(",")
@@ -28,9 +30,7 @@ const newGroupChatvalidator=()=>[
     body("name","Please Enter THe Name of the Group").notEmpty(),
     body("members")
         .notEmpty()
-        .withMessage("Please Enter Members")
-        .isArray({min:2})
-        .withMessage("Members must be between 2-50")
+        
 ]
 
 

@@ -10,8 +10,8 @@ const route=express.Router();
 // from this onwards isAuth will use
 route.use(isAuth)
 
-
-route.post('/new',newGroupChatvalidator(),validateHandler,newGroupChat);
+// newGroupChatvalidator(),validateHandler, validate
+route.post('/new',newGroupChat);
 route.get('/my',getMyChat);
 route.get('/my/groups',getMyGroups)
 route.put('/addmembers',addMembers)

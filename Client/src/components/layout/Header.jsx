@@ -3,7 +3,7 @@ import {Bolt,Menu as MenuIcon,Search as SearchIcon,Add as AddIcon,Notifications 
 import {useNavigate} from "react-router-dom"
 import { lazy, Suspense, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsMobileMenu, setIsNotifications, setIsSearch, } from "../../redux/reducers/misc";
+import { setIsMobileMenu, setIsNewGroup, setIsNotifications, setIsSearch, } from "../../redux/reducers/misc";
 import { resetNotification } from "../../redux/reducers/chat";
 
 
@@ -14,14 +14,14 @@ const NotifyDialog=lazy(()=>import("../specific/Notifications"));
 const Header=()=>{
 
     const dispatch=useDispatch();
-    const {isMobileMenu,isSearch,isNotifications}=useSelector((state)=> state.misc)
+    const {isMobileMenu,isSearch,isNotifications,isNewGroup}=useSelector((state)=> state.misc)
     const {notificationCount}=useSelector((state)=>state.chat)
 
     // const handleMobileMenu=()=> ;
     
 
     // const [isSearch,setIsSearch]=useState(false);
-    const [isAddBtn,setisAddBtn]=useState(false);
+    // const [isAddBtn,setisAddBtn]=useState(false);
     const NotificationOpenHandler=()=>{
             dispatch(setIsNotifications(true))
             dispatch(resetNotification())
@@ -59,7 +59,8 @@ const Header=()=>{
     
     const AddIconDialog=()=>{
         console.log("AddIconDialog Btn")
-        setisAddBtn(prev=>!prev);
+        dispatch(setIsNewGroup(true))
+        // setisAddBtn(prev=>!prev);
     }
     const NavigateToGrp=()=>{
         navigate("/groups")
@@ -146,7 +147,7 @@ const Header=()=>{
             <SearchDialog />
             </Suspense>)}
         
-        {isAddBtn && (
+        {isNewGroup && (
             <Suspense fallback={<Backdrop open />}> 
             <AddDialog />
             </Suspense>)}
