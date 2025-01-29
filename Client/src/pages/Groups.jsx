@@ -5,7 +5,7 @@ import { useNavigate,useSearchParams } from "react-router-dom";
 import { Link } from "../components/styled/StyleComponents";
 import { samplechats, sampleUser } from "../components/shared/sampledata";
 import UserAddGroupItem from "../components/shared/UserAddGroupItem";
-import { useMyGroupsQuery } from "../redux/api/api";
+import { useGetChatDetailsQuery, useMyGroupsQuery } from "../redux/api/api";
 import { LayoutLoaders } from "../components/layout/Loaders";
 
 
@@ -58,9 +58,20 @@ const Groups=()=>{
         navigate("/");
     }
 
-    const [groupName,setGroupName]=useState();
-    const [groupNameUpdated,setGroupNameUpdated]=useState();
+    const [groupMembers,setgroupMembers]=useState([]);
 
+    const ChatDetails=useGetChatDetailsQuery({chatId:chatId,populate:true},{skip:!chatId});
+    console.log("Chat detajs",ChatDetails)
+
+    const [groupName,setGroupName]=useState();
+    const [groupNameUpdated,setGroupNameUpdated]=useState();    
+
+    useEffect(()=>{
+        if(ChatDetails.data)
+        {
+            setgroupMembers(ChatDetails?.data?.chatu?.members)
+        }
+    },[ChatDetails.data])
 
     const [isMobileMenuOpen,setIsMobileMenuOpen]=useState(false)
 
@@ -211,8 +222,6 @@ const Groups=()=>{
 
     },[chatId])
 
-
-
     return(
         myGroups.isLoading?<LayoutLoaders />
         :<>
@@ -250,7 +259,8 @@ const Groups=()=>{
                 overflow={"auto"}
                 >
                 {
-                    sampleUser.length>0 ? (sampleUser.map((i)=>(
+                    
+                    groupMembers.length>0 ? (groupMembers.map((i)=>(
                        trial.includes(i._id) ? (<UserAddGroupItem 
                         user={i} selectedMembers={trial} 
                     />) : (
@@ -260,7 +270,6 @@ const Groups=()=>{
                         
                     ))) :(<Typography variant="h4">No Friends</Typography>)
                 }
-                    
                     
                     {isAddMember && (<Suspense fallback={<Backdrop open />}>
                     <AddMemberDialog  trial={trial} getdata={getdata} />
