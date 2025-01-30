@@ -7,20 +7,15 @@ const UserAddGroupItem=({user,selectedMemberUi,selectedMembers})=>{
         <Stack direction={"row"} spacing={"1rem"}  width={"100%"} alignItems={"center"} sx={{
             my:"10px"
         }}>
-            <Avatar src={avatar}/>
+            <Avatar src={avatar.url}/>
             <Typography variant="body2" sx={{
                 flexGrow:"1",
                 // bgcolor:"red",
                 width:"100%",
                 
             }}>{name}</Typography>
-            <IconButton onClick={()=>selectedMemberUi(_id)} >
-            
-            {
-                selectedMembers.includes(_id)?<RemoveIcon color="error"/>:<AddIcon color="primary" />
-            }
-            
-            
+            <IconButton onClick={()=>selectedMembers(_id)} >
+                <RemoveIcon color="error"/>
             </IconButton>
             
         </Stack>

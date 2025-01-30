@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { setIsMobileMenu } from "../../redux/reducers/misc"
 import { useErrors, useSocketEvents } from "../../hooks/hook"
 import { getSocket } from "../../Socket"
-import { NEW_MSG_ALERT, NEW_REQUEST } from "../constants/socketevents"
+import { NEW_MSG_ALERT, NEW_REQUEST, REFETCH_CHATS } from "../constants/socketevents"
 import { useCallback, useEffect } from "react"
 import { incNotifications, setNewMsgsAlert } from "../../redux/reducers/chat"
 import { getOrSaveFromLocalStorage } from "../../lib/features"
@@ -53,9 +53,14 @@ const AppLayout=()=>WrappedComponent =>{
             console.log("app alert",sds)
         },[chatId])
 
+        const RefetchHandler=useCallback(()=>{
+            refetch();
+        },[refetch])
+
         const eventArr={
             [NEW_MSG_ALERT]:newMsgAlertHandler,
-            [NEW_REQUEST]:newRequestHandler    
+            [NEW_REQUEST]:newRequestHandler,
+            [REFETCH_CHATS]:RefetchHandler
         }
         useSocketEvents(socket,eventArr)
 

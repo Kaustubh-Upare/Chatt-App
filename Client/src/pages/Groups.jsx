@@ -5,8 +5,9 @@ import { useNavigate,useSearchParams } from "react-router-dom";
 import { Link } from "../components/styled/StyleComponents";
 import { samplechats, sampleUser } from "../components/shared/sampledata";
 import UserAddGroupItem from "../components/shared/UserAddGroupItem";
-import { useGetChatDetailsQuery, useMyGroupsQuery } from "../redux/api/api";
+import { useAddMembersMutation, useGetChatDetailsQuery, useMyGroupsQuery, useRemoveMembersMutation, useRenameGroupMutation } from "../redux/api/api";
 import { LayoutLoaders } from "../components/layout/Loaders";
+import { useAsyncMutation } from "../hooks/hook";
 
 
 const FucConfirmDeleteDialog=lazy(()=>import("../components/dialog/FucConfirmDeleteDialog"));
@@ -43,10 +44,8 @@ const GroupListItem=memo(({group,chatId})=>{
     )
 })
 
-
 const Groups=()=>{
 
-    // const chatId="ok"
     const chatId=useSearchParams()[0].get("group");
     const navigate=useNavigate();
     console.log(chatId)
@@ -63,16 +62,31 @@ const Groups=()=>{
     const ChatDetails=useGetChatDetailsQuery({chatId:chatId,populate:true},{skip:!chatId});
     console.log("Chat detajs",ChatDetails)
 
+    const [renameGroup,isLoadingReGroupName]=useAsyncMutation(useRenameGroupMutation);
+    const [removeMembers,isLoadingReMem]=useAsyncMutation(useRemoveMembersMutation);
+    const [addMembers,isLoadingAdMem]=useAsyncMutation(useAddMembersMutation);
+
     const [groupName,setGroupName]=useState();
-    const [groupNameUpdated,setGroupNameUpdated]=useState();    
+    const [groupNameUpdated,setGroupNameUpdated]=useState("");    
 
     useEffect(()=>{
         if(ChatDetails.data)
         {
+            setGroupName(ChatDetails.data.chatu.name)
+            setGroupNameUpdated(ChatDetails.data.chatu.name)
             setgroupMembers(ChatDetails?.data?.chatu?.members)
         }
+
+        // return ()=>{
+        //     setGroupName("")
+        //     setGroupNameUpdated("")
+        //     setgroupMembers("");
+        //     setIsEdit(false);
+        // }
+
     },[ChatDetails.data])
 
+    console.log("ChatDeta",ChatDetails?.data?.chatu.members)
     const [isMobileMenuOpen,setIsMobileMenuOpen]=useState(false)
 
     const [isEdit,setIsEdit]=useState(false);
@@ -123,10 +137,11 @@ const Groups=()=>{
     const updateGroupValue=(e)=>{
         setIsEdit(false)
         console.log(`Group Name Update ${chatId}`)
+        renameGroup("Renaming Group",{name:groupNameUpdated,chatId:chatId})
     }
 
-    const GroupName=()=>{
-        console.log(isEdit);
+    const GroupName=memo(()=>{
+        
         return(
             
             <Stack
@@ -139,9 +154,10 @@ const Groups=()=>{
                         <TextField placeholder="Enter New Name" sx={{ color:"white",
                             border:"3px solid white"
                         }}
+                          value={groupNameUpdated}
                         onChange={(e)=>setGroupNameUpdated(e.target.value)}
                         ></TextField>
-                        <IconButton color="primary" onClick={updateGroupValue}>
+                        <IconButton color="primary" onClick={updateGroupValue} disabled={isLoadingReGroupName}>
                             <DoneIcon></DoneIcon>
                         </IconButton>
                         </Stack>
@@ -159,7 +175,7 @@ const Groups=()=>{
 
                 </Stack>
         )
-    }
+    })
 
     const openConfirmDeleteDialog=()=>{
         setConfirmDeleteDialog(true);
@@ -210,17 +226,22 @@ const Groups=()=>{
         
     // }
 
-    useEffect(()=>{
-        setGroupName(`Group Name ${chatId}`);
-        setGroupNameUpdated(`Group Name ${chatId}`)
+    // useEffect(()=>{
+    //     // setGroupName(`Group Name ${chatId}`);
+    //     // setGroupNameUpdated(`Group Name ${chatId}`)
 
-        return ()=>{
-            setGroupName("");
-            setGroupNameUpdated("");
-            setIsEdit(false)
-        }
+    //     return ()=>{
+    //         setGroupName("");
+    //         setGroupNameUpdated("");
+            
+    //     }
 
-    },[chatId])
+    // },[chatId])
+    const removeMemberHandler=(id)=>{
+        removeMembers("Removing Members...",{chatId,userId:id})
+        console.log("okr",d);
+    }
+
 
     return(
         myGroups.isLoading?<LayoutLoaders />
@@ -259,13 +280,13 @@ const Groups=()=>{
                 overflow={"auto"}
                 >
                 {
-                    
+                    // trial.includes(i._id) ?: (
+                    //     <Typography variant="h4">Add Friends</Typography>
+                    // )
                     groupMembers.length>0 ? (groupMembers.map((i)=>(
-                       trial.includes(i._id) ? (<UserAddGroupItem 
-                        user={i} selectedMembers={trial} 
-                    />) : (
-                        <Typography variant="h4">Add Friends</Typography>
-                    )
+                        (<UserAddGroupItem 
+                        user={i} selectedMembers={removeMemberHandler} 
+                    />) 
                         
                         
                     ))) :(<Typography variant="h4">No Friends</Typography>)
