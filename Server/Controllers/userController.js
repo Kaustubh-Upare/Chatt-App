@@ -199,7 +199,7 @@ const getAllNotifications=tryCatcher(async(req,res,next)=>{
 const getFriends=tryCatcher(async(req,res,next)=>{
 
     const {chatId}=req.query
-
+    console.log("chattuFriends",chatId)
     const chatu=await Chat.find({members:req.user,groupChat:false})
             .populate("members","name avatar");
 
@@ -214,6 +214,7 @@ const getFriends=tryCatcher(async(req,res,next)=>{
     })
 
     if(chatId){
+        console.log("chattuFriends")
         const specificChat=await Chat.findById(chatId);
         friends.includes(specificChat.members)
         const availableFriends=friends.filter((f)=>!specificChat.members.includes(f._id))

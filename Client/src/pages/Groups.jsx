@@ -5,9 +5,11 @@ import { useNavigate,useSearchParams } from "react-router-dom";
 import { Link } from "../components/styled/StyleComponents";
 import { samplechats, sampleUser } from "../components/shared/sampledata";
 import UserAddGroupItem from "../components/shared/UserAddGroupItem";
-import { useAddMembersMutation, useGetChatDetailsQuery, useMyGroupsQuery, useRemoveMembersMutation, useRenameGroupMutation } from "../redux/api/api";
+import { useAddMembersMutation, useAvailableFriendsQuery, useGetChatDetailsQuery, useMyGroupsQuery, useRemoveMembersMutation, useRenameGroupMutation } from "../redux/api/api";
 import { LayoutLoaders } from "../components/layout/Loaders";
 import { useAsyncMutation } from "../hooks/hook";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsAddMembers } from "../redux/reducers/misc";
 
 
 const FucConfirmDeleteDialog=lazy(()=>import("../components/dialog/FucConfirmDeleteDialog"));
@@ -37,7 +39,7 @@ const GroupListItem=memo(({group,chatId})=>{
         if(chatId === _id) e.preventDefault();
     }}>
         <Stack direction={"row"} spacing="1rem" alignItems={"center"}>
-            <Stack direction={"row"}>{avatar.map((u)=><Avatar src={u} ></Avatar>)}</Stack>
+            <Stack direction={"row"}>{avatar.map((u,index)=><Avatar src={u} key={`ava${_id}${index}`}></Avatar>)}</Stack>
             <Typography variant="caption" >{name}</Typography>
         </Stack>
     </Link>
@@ -49,6 +51,9 @@ const Groups=()=>{
     const chatId=useSearchParams()[0].get("group");
     const navigate=useNavigate();
     console.log(chatId)
+
+    const dispatch=useDispatch();
+    const {isAddMember}=useSelector((state)=>state.misc)
 
     const myGroups=useMyGroupsQuery();
     console.log("girup",myGroups?.data)
@@ -65,6 +70,7 @@ const Groups=()=>{
     const [renameGroup,isLoadingReGroupName]=useAsyncMutation(useRenameGroupMutation);
     const [removeMembers,isLoadingReMem]=useAsyncMutation(useRemoveMembersMutation);
     const [addMembers,isLoadingAdMem]=useAsyncMutation(useAddMembersMutation);
+
 
     const [groupName,setGroupName]=useState();
     const [groupNameUpdated,setGroupNameUpdated]=useState("");    
@@ -191,12 +197,10 @@ const Groups=()=>{
 
     }
 
-    const [isAddMember,setAddMemberDialog]=useState(false); 
+    // const [isAddMember,setAddMemberDialog]=useState(false); 
     const openAddMemberDialog=()=>{
-        setAddMemberDialog(true);
+        dispatch(setIsAddMembers(true));
     }
-
-
     const ButtonGroup=()=>(
         <Stack direction={{
             xs:"column",
@@ -209,7 +213,7 @@ const Groups=()=>{
             md:"1rem 4rem"
         }}
         >
-            <Button variant="contained" startIcon={<AddIcon/>} onClick={setAddMemberDialog}>Add Member</Button>
+            <Button variant="contained" startIcon={<AddIcon />} onClick={openAddMemberDialog}>Add Member</Button>
             <Button color="error" variant="contained" onClick={openConfirmDeleteDialog}>Delete Group</Button>
         </Stack>
     )
@@ -285,7 +289,9 @@ const Groups=()=>{
                     // )
                     groupMembers.length>0 ? (groupMembers.map((i)=>(
                         (<UserAddGroupItem 
-                        user={i} selectedMembers={removeMemberHandler} 
+                        user={i}
+                        removeMembers={removeMemberHandler} 
+                        isAdded={true}
                     />) 
                         
                         
@@ -293,7 +299,7 @@ const Groups=()=>{
                 }
                     
                     {isAddMember && (<Suspense fallback={<Backdrop open />}>
-                    <AddMemberDialog  trial={trial} getdata={getdata} />
+                    <AddMemberDialog isAddMember={isAddMember}  chatId={chatId}  />
                     </Suspense>)}
 
                 </Stack>

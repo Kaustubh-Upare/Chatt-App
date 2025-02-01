@@ -90,7 +90,7 @@ const getMyGroups=tryCatcher(async(req,res,next)=>{
 
 })
 
-const   addMembers=tryCatcher(async(req,res,next)=>{
+const addMembers=tryCatcher(async(req,res,next)=>{
 
     const {chatId,members}=req.body;
     
@@ -318,6 +318,12 @@ const deleteGroup=tryCatcher(async(req,res,next)=>{
 
 const getMsgs=tryCatcher(async(req,res,next)=>{
     const chatId=req.params.id;
+
+    const chat=await Chat.findById(chatId);
+    if(!chat) return next(new ErrorHandler("Chat Not Found",404))
+    if(!chat.members.includes(req.user.toString())){
+        return next(new ErrorHandler("You are not Allowed to access this Chat",403))
+    }
 
     const {page =1}=req.query;
     const limit=20;
