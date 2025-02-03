@@ -284,9 +284,17 @@ const deleteGroup=tryCatcher(async(req,res,next)=>{
     const chatu=await Chat.findById(chatId);
     if(!chatu) return next(new ErrorHandler("The Group Doesnt Exist",404));
 
-    if(!chatu.groupChat) return next(new ErrorHandler("It is Not Group Jerk",404));
+    const members = chatu.members;
+    // if(!chatu.groupChat) return next(new ErrorHandler("It is Not Group Jerk",404));
+    if(chatu.groupChat && chatu.creator.toString() !== req.user.toString()){
+        return next(new ErrorHandler("You are not Allowed to delete this group",403))
+    }
 
-    if(chatu.creator.toString()!==req.user.toString()) return next(new ErrorHandler("U r Not Authorize to Change it",404))
+    if (!chatu.groupChat && !chatu.members.includes(req.user.toString())) {
+        return next(
+          new ErrorHandler("You are not allowed to delete the chat", 403)
+        );
+      }
 
     const msgWithAttachments=await Message.find({
         chat:chatu,

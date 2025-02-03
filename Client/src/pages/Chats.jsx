@@ -81,7 +81,6 @@ const Chats=({chatId})=>{
     }
 
 
-
     const submitHandler=(e)=>{
         e.preventDefault();
         if(!inputMsg.trim()) return;
@@ -122,6 +121,7 @@ const Chats=({chatId})=>{
         const chatContainer=containerRef.current;
         const hasScrollbar = chatContainer?.scrollHeight > chatContainer?.clientHeight;
         
+        console.log("hasScrolBar",hasScrollbar)
         const handleScroll=()=>{
             console.log("ScrollTop:", chatContainer.scrollTop);
             if (chatContainer.scrollTop === 0 && !isLoading) {
@@ -141,6 +141,12 @@ const Chats=({chatId})=>{
 
     },[isLoading,chatId])
 
+    console.log("tota1k",infData)
+    console.log("tota2k",messages)
+    const t=[...infData,...messages];
+    console.log("tota",t)
+
+
     const fileMenuHandler=(e)=>{
         console.log("okay")
         dispatch(setIsFileMenu(true))
@@ -150,7 +156,7 @@ const Chats=({chatId})=>{
     return(
         chatDetails.isLoading?<Skeleton /> :
         <>
-        <Stack ref={containerRef}  bgcolor={"#000401"} height={"90%"} sx={{padding:"0.5rem",overflowY:"auto",overflowX:"hidden"}}>
+        <Stack ref={containerRef}  bgcolor={"#0e0e0e"} height={"90%"} sx={{padding:"0.5rem",overflowY:"auto",overflowX:"hidden"}}>
             
         {
             infData.map((i,index)=>(

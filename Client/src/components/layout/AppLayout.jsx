@@ -116,7 +116,7 @@ const AppLayout=()=>WrappedComponent =>{
                         sm:"block",
                     },
                     padding:"2rem",
-                        bgcolor:"rgb(0, 0, 0)"
+                        bgcolor:"#0e0e0e"
 
                 }}><Profile /></Grid>
                 
