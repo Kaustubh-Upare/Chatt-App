@@ -19,7 +19,6 @@ const Add=()=>{
 
 
     console.log("friend",data)
-    const users=sampleUser
     const [Members,setMembers]=useState(sampleUser)
     const [selectedMembers,setSelectedMembers]=useState([])
     const [textfieldValue,setTextfieldValue]=useState("");
@@ -65,11 +64,11 @@ const Add=()=>{
                 <List sx={{px:"10px"}} >
                 { 
                 isLoading?<Skeleton />
-                :(data.ff.map((user)=>(
+                :(data?.ff.map((user)=>(
                         <UserAddGroupItem selectedMemberUi={selectedMemberUi} selectedMembers={selectedMembers}
                         user={user}
                         key={user._id} 
-                        
+                        isAdded={false}
                         />
                     )))}
                     <Stack direction={"row"} justifyContent={"space-evenly"}>

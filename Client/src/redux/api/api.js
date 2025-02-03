@@ -75,7 +75,7 @@ const api=createApi({
                 providesTags:['Chat']
             }),
             availableFriends:builder.query({
-                query:({chatId})=>{
+                query:({chatId}= {})=>{
                    let url=`user/friends`;
                    if(chatId){url=`user/friends?chatId=${chatId}`}
                     return{
@@ -124,6 +124,15 @@ const api=createApi({
                 }),
                 invalidatesTags:['Chat']
             }),
+            deleteGroup:builder.mutation({
+                query:({chatId,groupChat})=>({
+                    url:`chat/${chatId}`,
+                    method:"DELETE",
+                    credentials:'include',   
+            
+                }),
+                invalidatesTags:['Chat']
+            })
         })
         
 })
@@ -137,5 +146,6 @@ export const
     useRequestAccRejMutation,
     useGetChatDetailsQuery,useGetOldMsgsQuery,
     useSendAttachyMutation,useMyGroupsQuery,useAvailableFriendsQuery,useCNewGroupMutation,
-    useRenameGroupMutation,useRemoveMembersMutation,useAddMembersMutation
+    useRenameGroupMutation,useRemoveMembersMutation,useAddMembersMutation,
+    useDeleteGroupMutation
 }=api;

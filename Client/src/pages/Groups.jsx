@@ -1,11 +1,10 @@
 import { Add as AddIcon, ArrowBackIosNew as ArrowBackIcon, Done as DoneIcon, Edit, Menu as MenuIcon} from "@mui/icons-material";
-import { Avatar, Backdrop, Button, Drawer, Grid, IconButton, Input, Stack, TextField, Tooltip, Typography } from "@mui/material";
+import { Avatar, Backdrop, Button, CircularProgress, Drawer, Grid, IconButton, Input, Stack, TextField, Tooltip, Typography } from "@mui/material";
 import { lazy, memo, Suspense, useEffect, useState } from "react";
 import { useNavigate,useSearchParams } from "react-router-dom";
 import { Link } from "../components/styled/StyleComponents";
-import { samplechats, sampleUser } from "../components/shared/sampledata";
 import UserAddGroupItem from "../components/shared/UserAddGroupItem";
-import { useAddMembersMutation, useAvailableFriendsQuery, useGetChatDetailsQuery, useMyGroupsQuery, useRemoveMembersMutation, useRenameGroupMutation } from "../redux/api/api";
+import { useAddMembersMutation, useAvailableFriendsQuery, useDeleteGroupMutation, useGetChatDetailsQuery, useMyGroupsQuery, useRemoveMembersMutation, useRenameGroupMutation } from "../redux/api/api";
 import { LayoutLoaders } from "../components/layout/Loaders";
 import { useAsyncMutation } from "../hooks/hook";
 import { useDispatch, useSelector } from "react-redux";
@@ -70,7 +69,8 @@ const Groups=()=>{
     const [renameGroup,isLoadingReGroupName]=useAsyncMutation(useRenameGroupMutation);
     const [removeMembers,isLoadingReMem]=useAsyncMutation(useRemoveMembersMutation);
     const [addMembers,isLoadingAdMem]=useAsyncMutation(useAddMembersMutation);
-
+    const [deleteGroup,deleteGrpLoading]=useAsyncMutation(useDeleteGroupMutation);
+    
 
     const [groupName,setGroupName]=useState();
     const [groupNameUpdated,setGroupNameUpdated]=useState("");    
@@ -284,18 +284,17 @@ const Groups=()=>{
                 overflow={"auto"}
                 >
                 {
-                    // trial.includes(i._id) ?: (
-                    //     <Typography variant="h4">Add Friends</Typography>
-                    // )
-                    groupMembers.length>0 ? (groupMembers.map((i)=>(
+                    deleteGrpLoading?<CircularProgress />
+                    :
+                    (groupMembers.length>0 ? (groupMembers.map((i)=>(
                         (<UserAddGroupItem 
                         user={i}
                         removeMembers={removeMemberHandler} 
                         isAdded={true}
                     />) 
                         
-                        
                     ))) :(<Typography variant="h4">No Friends</Typography>)
+                    )
                 }
                     
                     {isAddMember && (<Suspense fallback={<Backdrop open />}>
@@ -305,7 +304,8 @@ const Groups=()=>{
                 </Stack>
                 <ButtonGroup />
                 {confirmDeleteDialog && (<Suspense fallback={<div>Loading ..</div>}>
-                 <FucConfirmDeleteDialog open={confirmDeleteDialog} handleclose={closeConfirmDeleteDialog} />
+                 <FucConfirmDeleteDialog open={confirmDeleteDialog} 
+                 handleclose={closeConfirmDeleteDialog} deleteGroup={deleteGroup} chatId={chatId} />
                  </Suspense>)}
             </Grid>
         </Grid>

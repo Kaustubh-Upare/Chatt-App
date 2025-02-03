@@ -1,5 +1,8 @@
 import { Stack } from "@mui/material";
 import ChatItem from "../shared/ChatItem";
+import { useDispatch } from "react-redux";
+import { setIsDeleteMenu, setSelectedDeleteChat } from "../../redux/reducers/misc";
+import { useMemo, useRef } from "react";
 
 
 const ChatList=({
@@ -8,10 +11,23 @@ const ChatList=({
     chatId,
     onlineUsers=[],
     newMessagesAlert,
-    handleDeleteChat
+    
 })=>{
-    // const {chatId,count}=newMessagesAlert
+    const dispatch=useDispatch();
+
+    const deleteMenuAnchor=useRef(null);
+   
+    const handleDeleteChat=(e,chatId,groupChat)=>{
+        e.preventDefault();
+        dispatch(setIsDeleteMenu(true));
+        dispatch(setSelectedDeleteChat({chatId,groupChat}))
+        deleteMenuAnchor.current=e.currentTarget;
+        console.log("Context",chatId,groupChat)
+    }
+   
+
     return(
+
         <Stack  width={w} direction="column" >
             {
                 chats?.map((data,index)=>{
@@ -27,7 +43,7 @@ const ChatList=({
                         groupChat={groupChat}
                         sameSender={chatId=== _id}
                         handleDelteChatOpen={handleDeleteChat}
-                    
+                        deleteMenuAnchor={deleteMenuAnchor}
                     />
                 })
             }

@@ -13,6 +13,7 @@ import { NEW_MSG_ALERT, NEW_REQUEST, REFETCH_CHATS } from "../constants/socketev
 import { useCallback, useEffect } from "react"
 import { incNotifications, setNewMsgsAlert } from "../../redux/reducers/chat"
 import { getOrSaveFromLocalStorage } from "../../lib/features"
+import DeleteChatMenuDialog from "../dialog/DeleteChatMenuDialog"
 
 const AppLayout=()=>WrappedComponent =>{
     return (props)=>{
@@ -70,7 +71,7 @@ const AppLayout=()=>WrappedComponent =>{
             <>
                 <Title></Title>
                 <Header></Header>
-
+                
                 {isLoading ? (
                     <Skeleton />
                 ) : (

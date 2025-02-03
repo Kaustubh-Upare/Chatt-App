@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import {Link} from "../styled/StyleComponents";
 import { memo } from 'react';
+import DeleteChatMenuDialog from "../dialog/DeleteChatMenuDialog";
 
 const ChatItem=({
     // avtaar:[],
@@ -10,10 +11,13 @@ const ChatItem=({
     sameSender,
     isOnline,
     newMsgsAlert,
-    index=0,
-    handleDelteChatOpen
+    handleDelteChatOpen,
+    deleteMenuAnchor
 })=>{
     return(
+        <>
+        <DeleteChatMenuDialog groupChat={groupChat} deleteMenuAnchor={deleteMenuAnchor} />
+
         <Link to={`/chats/${_id}`} onContextMenu={(e)=> handleDelteChatOpen(e,_id,groupChat)}>
             <div style={{
                 display:"flex",
@@ -23,7 +27,7 @@ const ChatItem=({
                 backgroundColor:sameSender?"black":"unset",
                 color:sameSender?"white":"unset",
                 position:"relative"
-            }}>
+            }} >
 
             <Stack>
                 <Typography >{name}</Typography>
@@ -50,6 +54,7 @@ const ChatItem=({
 
             </div>
         </Link> 
+        </>
     )
 }
 export default memo(ChatItem);

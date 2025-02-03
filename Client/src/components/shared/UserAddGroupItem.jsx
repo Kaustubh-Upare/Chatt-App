@@ -1,9 +1,11 @@
 import { Avatar, IconButton, Stack, Typography } from "@mui/material";
 import { Add as AddIcon ,Remove as RemoveIcon} from "@mui/icons-material";
-import { useState } from "react";
+
 
 const UserAddGroupItem=({user,selectedMemberUi,selectedMembers,removeMembers,isAdded})=>{
+    console.log("haa",user)
     const {name,_id,avatar}=user;
+
     return(
         <Stack direction={"row"} spacing={"1rem"}  width={"100%"} alignItems={"center"} sx={{
             my:"10px"
