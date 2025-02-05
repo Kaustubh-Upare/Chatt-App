@@ -3,7 +3,7 @@ import AppLayout from "../components/layout/AppLayout";
 import {AttachFile as AttachIcon,Send as SendIcon} from "@mui/icons-material"
 import { InputBox } from "../components/styled/StyleComponents";
 import MessageComponent from "../components/shared/MessageComponent";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getSocket } from "../Socket";
 import { NEW_MSG, Start_Typing, Stop_Typing } from "../components/constants/socketevents";
 import { useGetChatDetailsQuery, useGetOldMsgsQuery } from "../redux/api/api";
@@ -19,6 +19,7 @@ const Chats=({chatId})=>{
 
     const containerRef=useRef(null)
     const bottomRef=useRef(null)
+    const lastMessageRef = useRef(null);
     
     const {user}=useSelector((state)=>state.auth)
     const {isFileMenu}=useSelector((state)=>state.misc)
@@ -27,15 +28,24 @@ const Chats=({chatId})=>{
     const [fileMenuAnchor,setFileMenuAnchor]=useState(null);
     const [inputMsg,setinputMsg]=useState("");
     const [messages,setMessages]=useState([]);
-    const [infData,setInfData]=useState(()=>[]);
+    // const [showingAllMsgs,setshowingAllMsgs]=useState([])
     
     const [iAmTyping,setiAmTyping]=useState(false);
     const [userTyping,setusertyping]=useState(false);
     const typingTimeout=useRef(null);
 
+    const [infData,setInfData]=useState([]);
     const [page,setPage]=useState(1);
+    const [totalPages,setTotalPages]=useState(0);
+    const observer = useRef();
     const socket=getSocket();
     
+    const lastChatElement=useCallback(()=>{
+        console.log("use");
+        
+    },[page])
+
+
     useEffect(()=>{
         dispatch(removeNewMsgAlert({chatId}))
        return ()=>{
@@ -47,23 +57,33 @@ const Chats=({chatId})=>{
     },[chatId])
    
     useEffect(()=>{
-        if(bottomRef.current) bottomRef.current.scrollIntoView({behavior:"smooth"})
+        if(bottomRef.current) bottomRef.current.scrollIntoView({behavior:"smooth",block:'end'})
         
     },[messages])
 
-    // console.log("mmm",oldMsgsChunck?.data)
     const {data:oldMsgsChunck,isLoading}=useGetOldMsgsQuery({chatId,page:page});
+    // console.log("ciel",oldMsgsChunck?.totalPages)
 
     const chatDetails=useGetChatDetailsQuery({chatId});
     const members=chatDetails?.data?.chatu?.members;
   
     useEffect(()=>{
         
-        if(oldMsgsChunck && Array.isArray(oldMsgsChunck?.msg) && oldMsgsChunck?.msg?.length){
-        setInfData((prev)=>[...prev,...oldMsgsChunck?.msg])
+        console.log("USEeFFECT LOADS",isLoading)
+        if(!isLoading && oldMsgsChunck.msg){
+            console.log("mongodb",...oldMsgsChunck.msg)
+            setTotalPages(()=>oldMsgsChunck.totalPages-1)
+            // const g=[...oldMsgsChunck.msg].reverse()
+            // console.log("reverse",g)
+            
+        setInfData((prev)=>[...prev,...oldMsgsChunck.msg])
         }
         console.log("After update, infData:", infData);
     },[page,oldMsgsChunck])
+
+    // useEffect(() => {
+    //     console.log("Updated infData:", infData); 
+    //   }, [infData]);
     
     const msgOnChangeHandler=(e)=>{
         setinputMsg(e.target.value)
@@ -117,36 +137,8 @@ const Chats=({chatId})=>{
     useSocketEvents(socket,eventArr)
    console.log(page)
    
-    useEffect(()=>{
-        const chatContainer=containerRef.current;
-        const hasScrollbar = chatContainer?.scrollHeight > chatContainer?.clientHeight;
-        
-        console.log("hasScrolBar",hasScrollbar)
-        const handleScroll=()=>{
-            console.log("ScrollTop:", chatContainer.scrollTop);
-            if (chatContainer.scrollTop === 0 && !isLoading) {
-              console.log("Scrollbar is at the tops");
-              console.log("Fetching older messages...");
-              setPage((p)=>p+1)
-            }
-        }
-            console.log("forMyself1",chatContainer?.scrollTop);
-       
-        chatContainer?.addEventListener("scroll", handleScroll);
-        
-        return ()=> {
-            chatContainer?.removeEventListener("scroll", handleScroll);
-            console.log("removed bc");
-          };
-
-    },[isLoading,chatId])
-
-    console.log("tota1k",infData)
-    console.log("tota2k",messages)
-    const t=[...infData,...messages];
-    console.log("tota",t)
-
-
+    const t=[...messages,...infData];
+    // setshowingAllMsgs((prev)=>[...prev,...infData,...messages])
     const fileMenuHandler=(e)=>{
         console.log("okay")
         dispatch(setIsFileMenu(true))
@@ -156,18 +148,27 @@ const Chats=({chatId})=>{
     return(
         chatDetails.isLoading?<Skeleton /> :
         <>
-        <Stack ref={containerRef}  bgcolor={"#0e0e0e"} height={"90%"} sx={{padding:"0.5rem",overflowY:"auto",overflowX:"hidden"}}>
+        <Stack ref={containerRef}  bgcolor={"#0e0e0e"} height={"90%"} sx={{padding:"0.5rem",flexDirection:"column-reverse",
+            overflowY:"auto",overflowX:"hidden"}}>
             
         {
-            infData.map((i,index)=>(
-                <MessageComponent key={`infData-${index}`} message={i} user={user} />
+            t.map((i,index)=>(
+                <MessageComponent key={`infData-${index}`} 
+                 message={i} 
+                 user={user}
+                 reff={index===t.length-2 ? lastMessageRef :null} 
+                 totalPages={totalPages}
+                 setPage={setPage}
+                 index={index}
+                 page={page}
+                 />
             ))
         }   
         
         {
-            messages.map((i)=>(
-                <MessageComponent message={i} user={user} />
-            ))
+            // messages.map((i)=>(
+            //     <MessageComponent message={i} user={user} />
+            // ))
         }   
        
             {userTyping && <TypingLoader />}

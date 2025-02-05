@@ -339,7 +339,7 @@ const getMsgs=tryCatcher(async(req,res,next)=>{
 
     const currentPage = Math.max(1, parseInt(page, 10));
 
-    const [messages,totalMsgsCount]=await Promise.all([await Message.find({chat:chatId})
+    const [messages,totalMsgsCount]=await Promise.all([Message.find({chat:chatId})
         .sort({createdAt:-1})
         .skip((currentPage-1)*limit)
         .limit(limit)

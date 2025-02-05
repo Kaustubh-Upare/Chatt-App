@@ -1,9 +1,34 @@
 import { Typography,Box} from "@mui/material";
 import { fileFormat } from "../../lib/features";
 import RenderAttachment from "./RenderAttachment";
+import { useEffect } from "react";
 
-const MessageComponent =({message,user})=>{
+const MessageComponent =({message,user,setPage,reff,index,totalPages,page})=>{
     
+    console.log("induu",index)
+    useEffect(()=>{
+        if(!reff & totalPages ===0) return;
+
+        const observer=new IntersectionObserver((param)=>{
+            console.log("inside induu",index)
+            if(param[0].isIntersecting && page<totalPages){
+                console.log("reference msg component");
+                setPage((p)=>p+1);
+            }
+        });
+        if(reff){
+            observer.observe(reff.current)
+        }
+        
+        return ()=> {
+            if (reff && reff.current){
+                console.log("madarbh")
+                observer.unobserve(reff.current);
+            }
+        }
+
+    },[reff,totalPages])
+
 
     const {sender,content,attachments=[],createdAt}=message;
     
@@ -20,6 +45,7 @@ const MessageComponent =({message,user})=>{
                 width:"fit-content",
                 margin:"3px"
             }}
+            ref={reff}
             >
                 { !sameSender && <Typography variant="caption" color="blue" fontWeight={"600"}>{sender.name}</Typography>}
                 
