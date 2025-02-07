@@ -130,4 +130,10 @@ const AdminLogout=tryCatcher(async(req,res,next)=>{
     })
 })
 
-module.exports={userAdmin,userMsgs,userDashboard,AdminLogin,AdminLogout}
+const getAdminData=tryCatcher(async(req,res,next)=>{
+    return res.status(200).json({
+        admin:true
+    })
+})
+
+module.exports={userAdmin,userMsgs,userDashboard,AdminLogin,AdminLogout,getAdminData}

@@ -2,6 +2,7 @@ import { Typography,Box} from "@mui/material";
 import { fileFormat } from "../../lib/features";
 import RenderAttachment from "./RenderAttachment";
 import { useEffect } from "react";
+import {motion} from 'framer-motion'
 
 const MessageComponent =({message,user,setPage,reff,index,totalPages,page})=>{
     
@@ -35,7 +36,9 @@ const MessageComponent =({message,user,setPage,reff,index,totalPages,page})=>{
     const sameSender=sender._id===user?.data?.data;
     
     return(
-        <div
+        <motion.div
+            initial={{opacity:0,x:"-100%"}}
+            animate={{opacity:1,x:0}}
             style={{
                 alignSelf:sameSender?"flex-end":"flex-start",
                 backgroundColor:"white",
@@ -64,7 +67,7 @@ const MessageComponent =({message,user,setPage,reff,index,totalPages,page})=>{
                 })}
                 
                 
-        </div>
+        </motion.div>
             
     )
 }

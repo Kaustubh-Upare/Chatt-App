@@ -44,6 +44,7 @@ const ChatList=({
                         sameSender={chatId=== _id}
                         handleDelteChatOpen={handleDeleteChat}
                         deleteMenuAnchor={deleteMenuAnchor}
+                        index={index}
                     />
                 })
             }

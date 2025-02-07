@@ -2,7 +2,15 @@ import { Drawer, Grid, IconButton, Stack, Typography } from "@mui/material";
 import { Menu as MenuIcon ,Close as CloseIcon} from "@mui/icons-material";
 import { useState } from "react";
 import AdminSidebar from "./AdminSidebar";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+
+
+
 const AdminLayout=({children})=>{
+    
+const {isAdmin}=useSelector((state)=>state.auth);
+
     const [isMobile,setIsMobile]=useState(false);
     const Sidebar=({w="100%"})=>{
         return(
@@ -15,6 +23,12 @@ const AdminLayout=({children})=>{
     const HandleClose=()=>{
         setIsMobile(false)
     }
+    // const isAdmin=false
+    if(!isAdmin){
+        return <Navigate to='/admin' />
+    }
+    
+    console.log("haa")
 
     return(
         <>

@@ -20,7 +20,7 @@ const adminAuth=tryCatcher(async(req,res,next)=>{
     const AdminIDKey=jwt.verify(token,'Anything');
 
     if(AdminIDKey !=="Admino") return next(new ErrorHandler("U r imposter Please re login it",403));
-    req.user=AdminID._id
+    req.user=AdminIDKey._id
     next()
 })
 

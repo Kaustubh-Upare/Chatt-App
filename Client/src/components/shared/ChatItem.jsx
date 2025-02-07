@@ -2,6 +2,8 @@ import { Box, Stack, Typography } from "@mui/material";
 import {Link} from "../styled/StyleComponents";
 import { memo } from 'react';
 import DeleteChatMenuDialog from "../dialog/DeleteChatMenuDialog";
+import {motion} from 'framer-motion'
+
 
 const ChatItem=({
     // avtaar:[],
@@ -12,14 +14,20 @@ const ChatItem=({
     isOnline,
     newMsgsAlert,
     handleDelteChatOpen,
-    deleteMenuAnchor
+    deleteMenuAnchor,
+    index
 })=>{
     return(
         <>
         <DeleteChatMenuDialog groupChat={groupChat} deleteMenuAnchor={deleteMenuAnchor} />
 
         <Link to={`/chats/${_id}`} onContextMenu={(e)=> handleDelteChatOpen(e,_id,groupChat)}>
-            <div style={{
+            <motion.div
+                initial={{opacity:0,targetY:"-100%"}}
+                whileInView={{opacity:1,y:0}}
+                transition={{delay:index*0.1}}
+
+                style={{
                 display:"flex",
                 gap:"1rem",
                 alignItems:"center",
@@ -52,7 +60,7 @@ const ChatItem=({
                 />
             )}
 
-            </div>
+            </motion.div>
         </Link> 
         </>
     )
