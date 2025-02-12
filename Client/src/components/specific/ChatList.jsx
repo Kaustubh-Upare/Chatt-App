@@ -32,11 +32,11 @@ const ChatList=({
             {
                 chats?.map((data,index)=>{
                     const {_id,name,groupChat,members}=data;
-                    // const isOnline=onlineUsers.includes(_id );
+                 // const isOnline=onlineUsers.includes(_id );
                     
                     const newMsgPop=newMessagesAlert.find((alert)=>alert.chatId ===_id);
-                    const isOnline=members?.some((member)=>onlineUsers.includes(member._id));
-                    return <ChatItem newMsgsAlert={newMsgPop} isOnline={isOnline.toString()} 
+                    const isOnline=members?.some((member)=>onlineUsers.includes(member));
+                    return <ChatItem newMsgsAlert={newMsgPop} isOnline={isOnline} 
                         name={name}
                         _id={_id}
                         key={_id}

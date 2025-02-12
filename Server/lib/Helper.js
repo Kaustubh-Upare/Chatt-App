@@ -1,5 +1,4 @@
 let userSocketIds=new Map();
-   
 
 const getotherMember=(members,userId)=>(
    members.find((member)=>member._id.toString() !== userId.toString())

@@ -9,3 +9,7 @@ export const NEW_REQUEST="NEW_REQUEST"
 
 export const Start_Typing="Start_Typing";
 export const Stop_Typing="Stop_Typing";
+
+export const Chat_Joined="Chat_Joined";
+export const Chat_Leaved="Chat_Leaved";
+export const Online_Users="Online_Users"

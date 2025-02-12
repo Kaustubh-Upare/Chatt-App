@@ -13,7 +13,7 @@ const {createServer}=require("http");
 const userRoute=require("./Routes/user.js");
 const chatRoute=require("./Routes/chat.js");
 const adminRoute=require("./Routes/admin.js");
-const { NEW_MSG, NEW_MSG_ALERT, Start_Typing, Stop_Typing } = require("./constants/events.js");
+const { NEW_MSG, NEW_MSG_ALERT, Start_Typing, Stop_Typing, Chat_Joined, Chat_Leaved,Online_Users } = require("./constants/events.js");
 const user = require("./Models/user.js");
 const { getSockets, userSocketIds } = require("./lib/Helper.js");
 const Message = require("./Models/Message.js");
@@ -38,7 +38,6 @@ app.set("io",io)
 
 
 // Middleware
-
 app.use(cors(corsOption))
 app.use(express.json());
 app.use(express.urlencoded());
@@ -50,6 +49,8 @@ app.use('/user',userRoute);
 app.use('/chat',chatRoute);
 app.use("/admin",adminRoute)
 app.use(errorMiddleware);
+
+const onlineUsers=new Set();
 
 // Socket COnnection THing-------------------
 app.get("/",(req,res,next)=>{
@@ -129,17 +130,28 @@ io.on("connection",(socket)=>{
         const memSockets=getSockets(members);
         socket.to(memSockets).emit(Stop_Typing,{chatId});
     })
-
-
-    socket.on("disconnect",()=>{
-    console.log("Disconnected", socket.id);
+    socket.on(Chat_Joined,({userId,members})=>{
+        console.log("Chat Joined",userId);
+        onlineUsers.add(userId);
+        const membersSocket=getSockets(members);
+        io.to(membersSocket).emit(Online_Users,Array.from(onlineUsers))
+    })
     
+    socket.on(Chat_Leaved,({userId,members})=>{
+        console.log("Chat Leaved",userId);
+        onlineUsers.delete(userId);
+        const membersSocket=getSockets(members);
+        io.to(membersSocket).emit(Online_Users,Array.from(onlineUsers))
+    })
+    socket.on("disconnect",()=>{
+    console.log("Disconnected", socket.id); 
     // Ensure _id is converted to string to match the map key format
     userSocketIds.delete(tempUser._id);
-    
+    onlineUsers.delete(tempUser._id);
+    socket.broadcast.emit(Online_Users,Array.from(onlineUsers))
+    console.log(onlineUsers)
     console.log("User deleted successfully from userSocketIds");
-
-})
+    })
 socket.on("reconnect", () => {
     console.log(`Socket reconnected: ${socket.id} for user ${tempUser._id}`);
 

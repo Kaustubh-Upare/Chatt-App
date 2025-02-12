@@ -39,13 +39,13 @@ const lineChartOptions={
 
 const labels=getLast7Days();
 
-const LineChart=()=>{
+const LineChart=({stats})=>{
     
     const data={
         labels:labels,
         datasets:[
             {
-                data:[1,2,5,77],
+                data:stats.msgsChart,
                 label:"Revenue",
                 borderColor:"purple",
                 backgroundColor:"rgb(75, 159, 216)",

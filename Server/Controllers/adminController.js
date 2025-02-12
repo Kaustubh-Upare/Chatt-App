@@ -87,15 +87,15 @@ const userDashboard=tryCatcher(async(req,res,next)=>{
         $gte:last7Days,
         $lte:today,
     }}).select('+createdAt');
-
+    console.log(last7DaysMsgs)
     const msgsChart=new Array(7).fill(0);
 
     last7DaysMsgs.forEach(msg=>{
-        const approxIndex=(today.getTime()-msg.createdAt.getTime)/(1000*60*60*24);
+        const approxIndex=(today.getTime()-msg.createdAt.getTime())/(1000*60*60*24);
         const Index=Math.min(6, Math.max(0, Math.floor(approxIndex)));
         msgsChart[6-Index]++
     })
-
+    console.log(msgsChart)
 
     return res.status(201).json({
         success:true,

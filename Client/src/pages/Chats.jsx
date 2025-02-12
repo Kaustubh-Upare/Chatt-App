@@ -5,7 +5,7 @@ import { InputBox } from "../components/styled/StyleComponents";
 import MessageComponent from "../components/shared/MessageComponent";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getSocket } from "../Socket";
-import { NEW_MSG, Start_Typing, Stop_Typing } from "../components/constants/socketevents";
+import { Chat_Joined, Chat_Leaved, NEW_MSG, Start_Typing, Stop_Typing } from "../components/constants/socketevents";
 import { useGetChatDetailsQuery, useGetOldMsgsQuery } from "../redux/api/api";
 import { useSocketEvents } from "../hooks/hook";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,6 +37,8 @@ const Chats=({chatId})=>{
     const [infData,setInfData]=useState([]);
     const [page,setPage]=useState(1);
     const [totalPages,setTotalPages]=useState(0);
+
+
     const observer = useRef();
     const socket=getSocket();
     
@@ -45,14 +47,19 @@ const Chats=({chatId})=>{
         
     },[page])
 
+    const chatDetails=useGetChatDetailsQuery({chatId});
+    const members=chatDetails?.data?.chatu?.members;
+
 
     useEffect(()=>{
+        socket.emit(Chat_Joined,{userId:user?.data?.data,members})
         dispatch(removeNewMsgAlert({chatId}))
        return ()=>{
             setPage(1);
             setInfData([])
             setMessages([]);
            console.log("Unmoutting")
+           socket.emit(Chat_Leaved,{userId:user?.data?.data,members})
         }
     },[chatId])
    
@@ -64,8 +71,7 @@ const Chats=({chatId})=>{
     const {data:oldMsgsChunck,isLoading}=useGetOldMsgsQuery({chatId,page:page});
     // console.log("ciel",oldMsgsChunck?.totalPages)
 
-    const chatDetails=useGetChatDetailsQuery({chatId});
-    const members=chatDetails?.data?.chatu?.members;
+    
   
     useEffect(()=>{
         

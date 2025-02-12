@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { setIsMobileMenu } from "../../redux/reducers/misc"
 import { useErrors, useSocketEvents } from "../../hooks/hook"
 import { getSocket } from "../../Socket"
-import { NEW_MSG_ALERT, NEW_REQUEST, REFETCH_CHATS } from "../constants/socketevents"
-import { useCallback, useEffect } from "react"
+import { NEW_MSG_ALERT, NEW_REQUEST, Online_Users, REFETCH_CHATS } from "../constants/socketevents"
+import { useCallback, useEffect, useState } from "react"
 import { incNotifications, setNewMsgsAlert } from "../../redux/reducers/chat"
 import { getOrSaveFromLocalStorage } from "../../lib/features"
 import DeleteChatMenuDialog from "../dialog/DeleteChatMenuDialog"
@@ -22,7 +22,9 @@ const AppLayout=()=>WrappedComponent =>{
        const navigate=useNavigate()
 
        const socket=getSocket();
-    
+        
+       
+        const [onlineUsers,setOnlineUsers]=useState([]);
 
         console.log("ok",socket?.id);
        
@@ -60,10 +62,15 @@ const AppLayout=()=>WrappedComponent =>{
             navigate("/")
         },[refetch,navigate])
 
+        const onlineUsersListener=useCallback((data)=>{
+            setOnlineUsers(data)
+        },[])
+
         const eventArr={
             [NEW_MSG_ALERT]:newMsgAlertHandler,
             [NEW_REQUEST]:newRequestHandler,
-            [REFETCH_CHATS]:RefetchHandler
+            [REFETCH_CHATS]:RefetchHandler,
+            [Online_Users]:onlineUsersListener
         }
         useSocketEvents(socket,eventArr)
 
@@ -78,7 +85,7 @@ const AppLayout=()=>WrappedComponent =>{
                 <Drawer open={isMobileMenu} onClose={handleMobileMenu} >
                     <ChatList  chats={data?.chats} chatId={chatId} 
                     newMessagesAlert={newMsgAlert} 
-                    onlineUsers={["1","2"]} 
+                    onlineUsers={onlineUsers} 
                     />
                 </Drawer>
                     )
@@ -102,7 +109,7 @@ const AppLayout=()=>WrappedComponent =>{
                     chats={data?.chats}
                     chatId={chatId}
                     newMessagesAlert={newMsgAlert} 
-                    onlineUsers={["1","2"]} 
+                    onlineUsers={onlineUsers} 
                     />
                 )}
                 </Grid>

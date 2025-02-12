@@ -1,11 +1,19 @@
-import { Container, Paper, Stack, Typography } from "@mui/material";
+import { Container, Paper,Stack, Typography } from "@mui/material";
 import AdminLayout from "./AdminLayout";
 import { AdminPanelSettings as AdminPanelSettingsIcon, Group as GroupIcon, Message as MessageIcon, Person as PersonIcon} from "@mui/icons-material";
 import { SearchField ,BaseBtn} from "../../components/styled/StyleComponents";
 import { DoughnutChart, LineChart } from "../../components/specific/Charts";
+import { useAdminDashboardQuery } from "../../redux/api/api";
+import { LayoutLoaders } from "../../components/layout/Loaders";
 
 const Dashboard=()=>{
 
+    const {data,isLoading}=useAdminDashboardQuery();
+    let stats={}
+    if(!isLoading){
+        stats={data}
+    }
+    console.log("dashboard",stats)
     const Appbar=(
         <Paper elevation={3} sx={{
             padding:"1rem",margin:"2rem 0",
@@ -65,7 +73,7 @@ const Dashboard=()=>{
         </Stack>
     )
 
-    return(
+    return isLoading?<LayoutLoaders />:(
         
         <AdminLayout>
          <Container component={"main"} >
@@ -88,7 +96,7 @@ const Dashboard=()=>{
                     overflow:"auto"
                 }} >
                     <Typography variant="h5">Last Messages</Typography>
-                    <LineChart />
+                    <LineChart stats={data} />
                 </Paper>
 
                 <Paper elevation={3} sx={{
@@ -102,7 +110,7 @@ const Dashboard=()=>{
                     maxWidth:"26rem",
                     height:"26rem"
                 }}>
-                    <DoughnutChart labels={["Single Chats","Group Chats"]} value={[23,66]} />
+                    <DoughnutChart labels={["Single Chats","Group Chats"]} value={[data?.msgs-data?.groupo,data?.groupo]} />
                     
                     <Stack
                     position={"absolute"}

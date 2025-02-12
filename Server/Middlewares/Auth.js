@@ -3,7 +3,7 @@ const { ErrorHandler } = require("../Util/utility.js");
 const {tryCatcher}=require("./error.js");
 const User = require("../Models/user.js");
 
-const isAuth=tryCatcher(async(req,resizeBy,next)=>{
+const isAuth=tryCatcher(async(req,res,next)=>{
     const token =req.cookies['Chat-Token'];
     if(!token) return next(new ErrorHandler("Please! Login First to access",401));
 

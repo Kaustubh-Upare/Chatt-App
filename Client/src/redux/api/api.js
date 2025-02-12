@@ -140,8 +140,13 @@ const api=createApi({
                     credentials:'include'
                 }),
                 invalidatesTags:['Chat']
+            }),
+            adminDashboard:builder.query({
+                query:()=>({
+                    url:'admin/dashboard',
+                    credentials:'include'
+                }),
             })
-
         })
         
 })
@@ -156,5 +161,5 @@ export const
     useGetChatDetailsQuery,useGetOldMsgsQuery,
     useSendAttachyMutation,useMyGroupsQuery,useAvailableFriendsQuery,useCNewGroupMutation,
     useRenameGroupMutation,useRemoveMembersMutation,useAddMembersMutation,
-    useDeleteGroupMutation,useLeaveMemberMutation
+    useDeleteGroupMutation,useLeaveMemberMutation,useAdminDashboardQuery
 }=api;
