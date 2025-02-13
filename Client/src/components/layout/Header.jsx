@@ -77,13 +77,13 @@ const Header=()=>{
     return(
         <>
         <Box sx={{flexGrow:1}} height={"4rem"} bgcolor={"rgb(25, 29, 29)"}>
-                <AppBar>
+                <AppBar color="#0F0F0F">
                 <Toolbar>
                 <Typography variant="h5" sx={{
-                    color:"rgb(228, 243, 11)",
+                    color:"#A879F8",
                     padding:"1rem",    
                     display:{xs:"none", sm:"block"}
-                }} ><Bolt /> Socket IO
+                }} ><Bolt sx={{color:"#E90109",}} /> Socket IO
                 </Typography>
                 
                 
@@ -97,7 +97,7 @@ const Header=()=>{
                     <IconButton onClick={handleMobile}>
                         <MenuIcon sx={{
                             textAlign:"center",
-                            color:"inherit"
+                            color:"#5A85F6"
                         }}></MenuIcon>
                     </IconButton>
                     
@@ -106,20 +106,20 @@ const Header=()=>{
                 <Box>
                     <IconBtn 
                     title={"Search"}
-                    icon={<SearchIcon />}
+                    icon={<SearchIcon sx={{color:"#5A85F6"}} />}
                     onClick={OpenSearch}
                     ></IconBtn>
 
                     <IconBtn 
                     title={"New Group"}
-                    icon={<AddIcon />}
+                    icon={<AddIcon sx={{color:"#5A85F6"}} />}
                     onClick={AddIconDialog}
                     
                     ></IconBtn>
 
                     <IconBtn 
                     title={"Notifications"}
-                    icon={<NotifyIcon />}
+                    icon={<NotifyIcon sx={{color:"#5A85F6"}} />}
                     onClick={NotificationOpenHandler}
                     value={notificationCount}
                     ></IconBtn>
@@ -127,13 +127,13 @@ const Header=()=>{
                 
                     <IconBtn 
                     title={"Group"}
-                    icon={<GroupIcon />}
+                    icon={<GroupIcon sx={{color:"#5A85F6"}} />}
                     onClick={NavigateToGrp}
                     ></IconBtn>
                 
                 <IconBtn 
                     title={"Logout"}
-                    icon={<LogoutIcon />}
+                    icon={<LogoutIcon sx={{color:"#EF4444"}} />}
                     onClick={LogoutBtn}
                     ></IconBtn>
                     

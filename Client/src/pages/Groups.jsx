@@ -17,7 +17,7 @@ const AddMemberDialog=lazy(()=>import("../components/dialog/AddMemberDialog"));
 
 const GroupList=({w="100%",myGroups=[],chatId})=>(
     <Stack width={w} sx={{
-        bgcolor:"rgb(227, 241, 27)",
+        bgcolor:"#191D1D",
         
     }} spacing={"1rem"} height={"100vh"} 
     overflow={"auto"}   >
@@ -34,12 +34,16 @@ const GroupList=({w="100%",myGroups=[],chatId})=>(
 const GroupListItem=memo(({group,chatId})=>{
     const {name,avatar,_id}=group;
     return(
-    <Link to={`?group=${_id}`} onClick={(e)=>{
+    <Link to={`?group=${_id}`} sx={{padding:"0.6rem"}} onClick={(e)=>{
         if(chatId === _id) e.preventDefault();
     }}>
-        <Stack direction={"row"} spacing="1rem" alignItems={"center"}>
-            <Stack direction={"row"}>{avatar.map((u,index)=><Avatar src={u} key={`ava${_id}${index}`}></Avatar>)}</Stack>
-            <Typography variant="caption" >{name}</Typography>
+        <Stack direction={"row"} spacing="1rem" alignItems={"center"}  >
+            <Stack direction={"row"}>{avatar.map((u,index)=><Avatar src={u} key={`ava${_id}${index}`}>
+            </Avatar>)}
+            </Stack>
+
+            <Typography variant="caption">{name}</Typography>
+  
         </Stack>
     </Link>
     )
@@ -251,12 +255,12 @@ const Groups=()=>{
         myGroups.isLoading?<LayoutLoaders />
         :<>
         <Grid container height={"100vh"}>
-            <Grid item sm={4} sx={{
+            <Grid item sm={4} lg={4} sx={{
                 display:{xs:"none",sm:"block"},
                 bgcolor:"rgba(0,0,0,0.8)",
                 overflow:"auto"
                 }}>
-                <GroupList myGroups={myGroups?.data?.GChats} chatId={chatId} w={"50vw"} />
+                <GroupList myGroups={myGroups?.data?.GChats} chatId={chatId}  />
             </Grid>
 
             <Grid item xs={12} sm={8} sx={{
@@ -264,13 +268,13 @@ const Groups=()=>{
                 flexDirection:"column",
                 alignItems:"center",
                 position:"relative",
-                bgcolor:"rgba(0,0,0,0.9)"
+                bgcolor:"#191D1D"
             }}>
                 <IconBtn />
                 {groupName && <GroupName />}
                 <Typography margin={"2rem"} variant="h4" >Members</Typography>
                 <Stack
-                bgcolor={"white"}
+                bgcolor={"#292b2b"}
                 maxWidth={"45rem"}
                 width={"100%"}
                 boxSizing={"border-box"}

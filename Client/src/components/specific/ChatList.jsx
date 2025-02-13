@@ -22,13 +22,12 @@ const ChatList=({
         dispatch(setIsDeleteMenu(true));
         dispatch(setSelectedDeleteChat({chatId,groupChat}))
         deleteMenuAnchor.current=e.currentTarget;
-        console.log("Context",chatId,groupChat)
     }
    
 
     return(
 
-        <Stack  width={w} direction="column" >
+        <Stack  width={w} direction="column" sx={{bgcolor:"#191D1D"}} height={"100%"} >
             {
                 chats?.map((data,index)=>{
                     const {_id,name,groupChat,members}=data;

@@ -26,22 +26,25 @@ const Search=()=>{
     useEffect(()=>{
         const recomend=setTimeout(()=>{
             searchUser(searchText).then(({data})=>setUsers(data.message)).catch((e)=>console.log("error"))
-        },1000)
+        },300)
 
         return ()=>clearTimeout(recomend)
 
     },[searchText])
 
     return(    
-        <Stack direction={"column"} alignItems={"center"} >
-        <Dialog open={isSearch} onClose={()=>dispatch(setIsSearch(false))}>
+        <Stack direction={"column"} alignItems={"center"}  >
+        <Dialog open={isSearch} onClose={()=>dispatch(setIsSearch(false))}   sx={{
+        "& .MuiPaper-root": { backgroundColor: "#191D1D", color: "#fff" },
+      }} >
             <DialogTitle  textAlign={"center"}>
                 <Typography variant="h6">Search People</Typography>
                 <TextField  value={searchText}  onChange={(e)=>{setSearchText(e.target.value)}}  slotProps={{
                     input:{
+                        sx:{color:"#109FE7"},
                         startAdornment:(
                             <InputAdornment position="start">
-                                <PersonIcon />
+                                <PersonIcon sx={{color:"#109FE7"}}/>
                             </InputAdornment>
                         )
                     }

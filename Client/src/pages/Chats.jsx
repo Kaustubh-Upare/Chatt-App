@@ -66,7 +66,7 @@ const Chats=({chatId})=>{
     useEffect(()=>{
         if(bottomRef.current) bottomRef.current.scrollIntoView({behavior:"smooth",block:'end'})
         
-    },[messages])
+    },[messages,])
 
     const {data:oldMsgsChunck,isLoading}=useGetOldMsgsQuery({chatId,page:page});
     // console.log("ciel",oldMsgsChunck?.totalPages)

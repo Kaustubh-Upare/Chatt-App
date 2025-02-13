@@ -44,16 +44,18 @@ const Add=()=>{
 
     console.log(selectedMembers)
     return(
-            <Dialog open={isNewGroup} onClose={closeHandler} >
+            <Dialog open={isNewGroup} onClose={closeHandler}  sx={{
+                "& .MuiPaper-root": { backgroundColor: "#191D1D", color: "#fff" },}} >
                 <DialogTitle textAlign={"center"} >
                 <Stack direction={"column"} alignItems={"center"} maxWidth={"25rem"} >
         
                     <Typography variant="h7">New Group</Typography>
                     <TextField value={textfieldValue} onChange={(e)=>setTextfieldValue(e.target.value)} slotProps={{
                     input:{
+                        sx:{color:"#e02d09"},
                         startAdornment:(
                             <InputAdornment position="start">
-                                <SearchIcon />
+                                <SearchIcon sx={{color:"#109FE7"}} />
                             </InputAdornment>
                         )
                     }

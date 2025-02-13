@@ -86,6 +86,7 @@ const AppLayout=()=>WrappedComponent =>{
                     <ChatList  chats={data?.chats} chatId={chatId} 
                     newMessagesAlert={newMsgAlert} 
                     onlineUsers={onlineUsers} 
+                    w={"50vw"}
                     />
                 </Drawer>
                     )
@@ -100,6 +101,7 @@ const AppLayout=()=>WrappedComponent =>{
                 lg={3}  
                 sx={{
                     display:{xs:"none",sm:"block"},
+                    backgroundColor:"#100c14"
                 }}
                 height={"100%"} overflow={"auto"}>
                 {isLoading ? (
@@ -123,7 +125,7 @@ const AppLayout=()=>WrappedComponent =>{
                         sm:"block",
                     },
                     padding:"2rem",
-                        bgcolor:"#0e0e0e"
+                        bgcolor:"#191D1D"
 
                 }}><Profile /></Grid>
                 

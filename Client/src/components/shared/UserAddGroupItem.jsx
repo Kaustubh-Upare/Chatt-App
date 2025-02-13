@@ -11,10 +11,11 @@ const UserAddGroupItem=({user,selectedMemberUi,selectedMembers,removeMembers,isA
             my:"10px"
         }}>
             <Avatar src={avatar}/>
-            <Typography variant="body2" sx={{
+            <Typography variant="button" sx={{
                 flexGrow:"1",
                 // bgcolor:"red",
                 width:"100%",
+                color:"#1976D2"
                 
             }}>{name}</Typography>
             {isAdded
