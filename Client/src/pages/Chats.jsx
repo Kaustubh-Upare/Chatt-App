@@ -41,11 +41,6 @@ const Chats=({chatId})=>{
 
     const observer = useRef();
     const socket=getSocket();
-    
-    const lastChatElement=useCallback(()=>{
-        console.log("use");
-        
-    },[page])
 
     const chatDetails=useGetChatDetailsQuery({chatId});
     const members=chatDetails?.data?.chatu?.members;
@@ -64,9 +59,16 @@ const Chats=({chatId})=>{
     },[chatId])
    
     useEffect(()=>{
-        if(bottomRef.current) bottomRef.current.scrollIntoView({behavior:"smooth",block:'end'})
+        console.log("runnnnnnnn")
+        if(bottomRef.current){
+            console.log("buton",containerRef.current);
+            containerRef.current.scrollTo({
+                top:containerRef.current.scrollHeight,
+                behavior:"smooth"
+            })
+        }
         
-    },[messages,])
+    },[messages])
 
     const {data:oldMsgsChunck,isLoading}=useGetOldMsgsQuery({chatId,page:page});
     // console.log("ciel",oldMsgsChunck?.totalPages)
@@ -119,7 +121,7 @@ const Chats=({chatId})=>{
     }
     const newMsgHandler=useCallback((data)=>{
                 if(data.chatId !== chatId) return;
-                setMessages((prev)=>[...prev,data.message])
+                setMessages((prev)=>[data.message,...prev])
                 },[chatId]); 
     
     const startTypingListener=useCallback((data)=>{
@@ -154,7 +156,8 @@ const Chats=({chatId})=>{
     return(
         chatDetails.isLoading?<Skeleton /> :
         <>
-        <Stack ref={containerRef}  bgcolor={"#0e0e0e"} height={"90%"} sx={{padding:"0.5rem",flexDirection:"column-reverse",
+        <Stack ref={containerRef}  bgcolor={"#0e0e0e"} height={"90%"} sx={{padding:"0.5rem"
+        ,flexDirection:"column-reverse",
             overflowY:"auto",overflowX:"hidden"}}>
             
         {
@@ -171,28 +174,25 @@ const Chats=({chatId})=>{
             ))
         }   
         
-        {
-            // messages.map((i)=>(
-            //     <MessageComponent message={i} user={user} />
-            // ))
-        }   
        
             {userTyping && <TypingLoader />}
 
             {/* for Scroll should be at bottom */}
-            <div ref={bottomRef} />
+            <div className="madad" ref={bottomRef} />
         </Stack>
-        <form onSubmit={submitHandler}>
-            <Stack direction={"row"} alignItems={"center"} height={"10%"} >
+        <form onSubmit={submitHandler} style={{height:"10%"}}>
+            <Stack direction={"row"} alignItems={"center"} height={"100%"} 
+            sx={{backgroundColor:"#303030",height:"100%"}}  >
                 
-                <IconButton onClick={fileMenuHandler}>
+                <IconButton onClick={fileMenuHandler} sx={{color:"red"}}>
                 <AttachIcon />
                 </IconButton>
                 {isFileMenu && <FileMenuAnchor anchorEl={fileMenuAnchor} chatId={chatId} />}
-                <InputBox placeholder="Type Messages Here...." value={inputMsg} onChange={msgOnChangeHandler}></InputBox>
+                <InputBox placeholder="Type Messages Here...." value={inputMsg} 
+                onChange={msgOnChangeHandler}   ></InputBox>
 
                 <IconButton type="submit">
-                <SendIcon />
+                <SendIcon sx={{color:"red"}} />
                 </IconButton>
                 
             </Stack>

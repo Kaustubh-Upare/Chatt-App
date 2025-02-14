@@ -217,8 +217,12 @@ const Groups=()=>{
             md:"1rem 4rem"
         }}
         >
+            {groupName &&
+            <>
             <Button variant="contained" startIcon={<AddIcon />} onClick={openAddMemberDialog}>Add Member</Button>
             <Button color="error" variant="contained" onClick={openConfirmDeleteDialog}>Delete Group</Button>
+            </>
+            }
         </Stack>
     )
 
@@ -271,8 +275,11 @@ const Groups=()=>{
                 bgcolor:"#191D1D"
             }}>
                 <IconBtn />
-                {groupName && <GroupName />}
+                {groupName?( 
+                <>
+                <GroupName />
                 <Typography margin={"2rem"} variant="h4" >Members</Typography>
+                
                 <Stack
                 bgcolor={"#292b2b"}
                 maxWidth={"45rem"}
@@ -306,6 +313,10 @@ const Groups=()=>{
                     </Suspense>)}
 
                 </Stack>
+                </>):<div style={{display:"flex",height:"100%",alignItems:"center",textAlign:"center"}}>
+                    <Typography color="primary" variant="button" fontSize={"large"}>Select The Group From The LeftSide</Typography>
+                </div>
+                }
                 <ButtonGroup />
                 {confirmDeleteDialog && (<Suspense fallback={<div>Loading ..</div>}>
                  <FucConfirmDeleteDialog open={confirmDeleteDialog} 

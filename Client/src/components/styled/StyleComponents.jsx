@@ -29,8 +29,10 @@ export const InputBox=styled("input")`
 width:100%;
 height:100%;
 border:none;
-background-color:white;
+background-color:#303030;
 outline:none;
+color:yellow;
+
 
 `
 
