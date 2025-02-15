@@ -8,7 +8,7 @@ const MessageComponent =({message,user,setPage,reff,index,totalPages,page})=>{
     
     console.log("induu",index)
     useEffect(()=>{
-        if(!reff & totalPages ===0) return;
+        if(!reff || totalPages===1) return;
 
         const observer=new IntersectionObserver((param)=>{
             console.log("inside induu",index)
@@ -41,17 +41,17 @@ const MessageComponent =({message,user,setPage,reff,index,totalPages,page})=>{
             animate={{opacity:1,x:0}}
             style={{
                 alignSelf:sameSender?"flex-end":"flex-start",
-                backgroundColor:"white",
-                color:"black",
-                borderRadius:"5px",
-                padding:"0.5rem",
+                backgroundColor:sameSender?"#B785F6":"#16171B",
+                color:"white",
+                borderRadius:"10px",
+                padding:"0.7rem",
                 width:"fit-content",
                 margin:"3px"
             }}
             ref={reff}
             >
-                { !sameSender && <Typography variant="caption" color="blue" fontWeight={"600"}>{sender.name}</Typography>}
-                
+                { !sameSender && <Typography variant="button" color="#0F85C1" fontWeight={"400"}>{sender.name}</Typography>}
+
                 { content && <Typography variant="body2">{content}</Typography>}
 
                 {attachments.length > 0 && attachments.map((attachMnt,index)=>{

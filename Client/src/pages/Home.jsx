@@ -3,7 +3,7 @@ import AppLayout from "../components/layout/AppLayout";
 const Home=()=>{
     return(
         <div style={{height:"100%",display:"flex",justifyContent:"center",
-            alignItems:"center",backgroundColor:"#191D1D",color:"#a30aab",
+            alignItems:"center",backgroundColor:"#16181c",color:"#a30aab",
             fontSize:"large",flexDirection:"column",textAlign:"center"
         }}>
            <h1>Homeee!</h1>

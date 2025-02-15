@@ -88,26 +88,28 @@ const Login=()=>{
     }
 
 
-
     return(    
     <Container component={"main"} maxWidth="xs" sx={{
         height:"100vh",
         display:"flex",
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
     }}>
         <Paper
-            elevation={3}
+            elevation={16}
             sx={{
                 padding:4,
                 display:"flex",
                 flexDirection:"column",
-                alignItems:"center"
+                alignItems:"center",
+                bgcolor:"#191D1D",
+                color:"white",
+                boxShadow: '1px 8px 18px rgb(14, 202, 235)'
             }}
         >
             {Login ? (
                 <>
-                <Typography varient="h5">Login</Typography>
+                <Typography  variant="button" fontSize={"50px"} color="" >Login</Typography>
                 <form style={{
                     width:"100%",
                     marginTop:"1rem"
@@ -117,9 +119,17 @@ const Login=()=>{
                     required 
                     fullWidth 
                     label="Username" 
-                    margin="normal" varient="outlined" 
+                    margin="normal" variant="standard" 
                     value={username}
                     onChange={(e)=>setUsername(e.target.value)}
+                    
+                    sx={{
+                        
+                        "& label": { color: "white" },
+                        "& label.Mui-focused": { color: "rgb(14, 202, 235)" },
+                        "&:hover label": { color: "rgb(11, 153, 179)" },
+                      }}
+
                     />
                     
                     <TextField 
@@ -127,14 +137,22 @@ const Login=()=>{
                     fullWidth 
                     type="password"
                     label="Password" 
-                    margin="normal" varient="outlined" 
+                    margin="normal" variant="standard" 
                     value={password}
                     onChange={(e)=>setPassword(e.target.value)}
+                    sx={{
+                        
+                        "& label": { color: "white" },
+                        "& label.Mui-focused": { color: "rgb(14, 202, 235)" },
+                        "&:hover label": { color: "rgb(11, 153, 179)" },
+                      }}
+
                     />
                 <Button 
-                sx={{marginTop:"1rem"}} 
-                varient="contained" color="primary" type="submit" fullWidth
-                onClick={handleLogin}    
+                sx={{marginTop:"1rem",marginBottom:"1rem",boxShadow:"17px 10px 23px -11px skyblue"}} 
+                variant="contained" color="#212121" type="submit" fullWidth
+                onClick={handleLogin}
+                
                 >
                     Login
                 </Button>
@@ -142,7 +160,7 @@ const Login=()=>{
                 <Typography textAlign={"center"}>OR</Typography>
 
                 <Button  
-                variant="text"
+                variant="outlined"
                 fullWidth
                 onClick={toggleLogin}
                 >Register Instead</Button>
@@ -150,34 +168,34 @@ const Login=()=>{
                 </form>
                 </>
             ) :  <>
-            <Typography varient="h5">Register</Typography>
+            <Typography variant="h5">Register</Typography>
             <form style={{
                 width:"100%",
-                marginTop:"1rem"
             }}>
                 <Stack direction="column" sx={{
                     justifyContent: "center",
                     alignItems: "center",
+                    position:"relative"
                 }}>
                     <Avatar alt="Remy Sharp" src={image} sx={{
                         width:"10rem",
-                        height:"10rem"
-                    }}/>
-                    <IconButton sx={{
-                    position:"absolute",
-                   top:0,
-                   left:0,
-                   right:0
+                        height:"10rem",
+                        
+                    }}>
                     
-                }}
-                onClick={() => document.getElementById("hidden-input").click()}
-                
-                >
-                    <>
-                    <CameraAltIcon />
-                    <VisuallyHiddenInput type="file" id="hidden-input" onChange={handleImageChange}/>
-                    </>
-                </IconButton>
+                    </Avatar>
+                    <IconButton sx={{
+                        position:"absolute",
+                        top:100,
+                        right:80,
+                    }}
+                        onClick={() => document.getElementById("hidden-input").click()}
+                    >
+                        <>
+                        <CameraAltIcon sx={{color:"black"}} />
+                        <VisuallyHiddenInput type="file" id="hidden-input" onChange={handleImageChange}/>
+                        </>
+                    </IconButton>
 
                 </Stack>
 
@@ -186,17 +204,38 @@ const Login=()=>{
                 <TextField 
                 required 
                 fullWidth 
-                label="name" 
-                margin="normal" varient="outlined" 
+                label="Name" 
+                margin="normal" variant="standard" 
                 value={name}
+                
                 onChange={(e)=>(setName(e.target.value))}
+                sx={{
+                    input:{color:"white"},
+                    "& .MuiInput-underline:before": { borderBottomColor: "skyblue" },
+                    "& .MuiInput-underline:hover:before": { borderBottomColor: "#0ec6f0" }, 
+                    "& .MuiInput-underline:after": { borderBottomColor: "#c70ef0" },
+                        
+                    "& label": { color: "white" },
+                    "& label.Mui-focused": { color: "rgb(14, 202, 235)" },
+                    "&:hover label": { color: "rgb(11, 153, 179)" },
+                  }}
                 />
                 <TextField 
                 fullWidth 
                 label="Bio" 
-                margin="normal" varient="outlined" 
+                margin="normal" variant="standard" 
                 value={bio}
                 onChange={(e)=>setBio(e.target.value)}
+                sx={{
+                    input:{color:"white"},
+                    "& .MuiInput-underline:before": { borderBottomColor: "skyblue" },
+                    "& .MuiInput-underline:hover:before": { borderBottomColor: "#0ec6f0" }, 
+                    "& .MuiInput-underline:after": { borderBottomColor: "#c70ef0" },
+                        
+                    "& label": { color: "white" },
+                    "& label.Mui-focused": { color: "rgb(14, 202, 235)" },
+                    "&:hover label": { color: "rgb(11, 153, 179)" },
+                  }}
                 />
                 
                
@@ -204,9 +243,19 @@ const Login=()=>{
                 required 
                 fullWidth 
                 label="Username" 
-                margin="normal" varient="outlined" 
+                margin="normal" variant="standard" 
                 value={username}
                 onChange={(e)=>setUsername(e.target.value)}
+                sx={{
+                    input:{color:"white"},
+                    "& .MuiInput-underline:before": { borderBottomColor: "skyblue" },
+                    "& .MuiInput-underline:hover:before": { borderBottomColor: "#0ec6f0" }, 
+                    "& .MuiInput-underline:after": { borderBottomColor: "#c70ef0" },
+                        
+                    "& label": { color: "white" },
+                    "& label.Mui-focused": { color: "rgb(14, 202, 235)" },
+                    "&:hover label": { color: "rgb(11, 153, 179)" },
+                  }}
                 />
                 
                 <TextField 
@@ -214,13 +263,23 @@ const Login=()=>{
                 fullWidth 
                 type="password"
                 label="Password" 
-                margin="normal" varient="outlined" 
+                margin="normal" variant="standard" 
                 value={password}
                 onChange={(e)=>setPassword(e.target.value)}
+                sx={{
+                    input:{color:"white"},
+                    "& .MuiInput-underline:before": { borderBottomColor: "skyblue" },
+                    "& .MuiInput-underline:hover:before": { borderBottomColor: "#0ec6f0" }, 
+                    "& .MuiInput-underline:after": { borderBottomColor: "#c70ef0" },
+
+                    "& label": { color: "white" },
+                    "& label.Mui-focused": { color: "rgb(14, 202, 235)" },
+                    "&:hover label": { color: "rgb(11, 153, 179)" },
+                  }}
                 />
             <Button 
-            sx={{marginTop:"1rem"}} 
-            varient="contained" color="primary" type="submit" fullWidth
+            sx={{marginTop:"1rem",marginBottom:"1rem"}} 
+            variant="contained" color="primary" type="submit" fullWidth
             onClick={handleRegister} 
                 >Register
             </Button>
@@ -228,9 +287,10 @@ const Login=()=>{
             <Typography textAlign={"center"}>OR</Typography>
 
             <Button  
-            variant="text"
+            variant="outlined"
             fullWidth
             onClick={toggleLogin}
+            color="warning"
             >Login Instead</Button>
 
             </form>

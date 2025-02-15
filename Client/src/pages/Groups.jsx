@@ -17,7 +17,7 @@ const AddMemberDialog=lazy(()=>import("../components/dialog/AddMemberDialog"));
 
 const GroupList=({w="100%",myGroups=[],chatId})=>(
     <Stack width={w} sx={{
-        bgcolor:"#191D1D",
+        bgcolor:"#18191A",
         
     }} spacing={"1rem"} height={"100vh"} 
     overflow={"auto"}   >
@@ -272,13 +272,13 @@ const Groups=()=>{
                 flexDirection:"column",
                 alignItems:"center",
                 position:"relative",
-                bgcolor:"#191D1D"
+                bgcolor:"#111217"
             }}>
                 <IconBtn />
                 {groupName?( 
                 <>
                 <GroupName />
-                <Typography margin={"2rem"} variant="h4" >Members</Typography>
+                <Typography margin={"2rem"} variant="h4" color="#5852D6" >Members</Typography>
                 
                 <Stack
                 bgcolor={"#292b2b"}
@@ -293,6 +293,7 @@ const Groups=()=>{
                 spacing={"2rem"}
                 height={"50vh"}
                 overflow={"auto"}
+                borderRadius={"16px"}
                 >
                 {
                     deleteGrpLoading?<CircularProgress />

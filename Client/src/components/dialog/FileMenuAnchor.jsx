@@ -53,7 +53,7 @@ const FileMenuAnchor=({anchorEl,chatId})=>{
 
     return(
         
-        <Menu open={isFileMenu} anchorEl={anchorEl} onClose={()=>dispatch(setIsFileMenu(false))}>
+        <Menu open={isFileMenu} anchorEl={anchorEl}  onClose={()=>dispatch(setIsFileMenu(false))}>
             <MenuList >
                 <MenuItem onClick={()=>selectRef(imageRef)}>
                     <ImageIcon /> Images <input type="file" multiple accept="image/png, image/jpg, image/jpeg" 

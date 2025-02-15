@@ -156,9 +156,11 @@ const Chats=({chatId})=>{
     return(
         chatDetails.isLoading?<Skeleton /> :
         <>
-        <Stack ref={containerRef}  bgcolor={"#0e0e0e"} height={"90%"} sx={{padding:"0.5rem"
+        <Stack ref={containerRef}  bgcolor={"#1D1E24"} height={"90%"} sx={{padding:"0.5rem"
         ,flexDirection:"column-reverse",
-            overflowY:"auto",overflowX:"hidden"}}>
+            overflowY:"auto",overflowX:"hidden",
+            
+            }}>
             
         {
             t.map((i,index)=>(

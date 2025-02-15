@@ -33,16 +33,19 @@ const AdminPage=()=>{
         alignItems:"center"
     }}>
         <Paper
-            elevation={3}
+            elevation={19}
             sx={{
                 padding:4,
                 display:"flex",
                 flexDirection:"column",
-                alignItems:"center"
+                alignItems:"center",
+                boxShadow: '11px 22px 64px 26px rgb(255, 8, 49)',
+                bgcolor:"#16181C",
+                color:"Red"
             }}
         >
             <>
-            <Typography varient="h5">Login</Typography>
+            <Typography variant="h5">Login</Typography>
                 
                 <form style={{
                     width:"100%",
@@ -55,13 +58,22 @@ const AdminPage=()=>{
                     fullWidth 
                     type="password"
                     label="Password" 
-                    margin="normal" varient="outlined"
+                    margin="normal" variant="standard"
                     value={password}
                     onChange={(e)=>setPassword(e.target.value)}
+                    sx={{
+                        "& .MuiInput-underline:before": { borderBottomColor: "maroon" },
+                        "& .MuiInput-underline:hover:before": { borderBottomColor: "red" }, 
+                        "& .MuiInput-underline:after": { borderBottomColor: "red" }, 
+                        "& label": { color: "maroon" },
+                        "& label.Mui-focused": { color: "rgb(235, 14, 14)" },
+                        "&:hover label": { color: "rgb(231, 18, 18)" },
+                      }}
+
                     />
                 <Button 
                 sx={{marginTop:"1rem"}} 
-                    varient="contained" color="primary" type="submit"  onClick={submitHandler}  fullWidth>Login
+                    variant="outlined" color="error" type="submit"  onClick={submitHandler}  fullWidth>Login
                 </Button>
                 
                 </form>

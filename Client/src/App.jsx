@@ -1,4 +1,4 @@
-
+import "./app.css"
 import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectRoute from "./components/auth/ProtectRoute";
