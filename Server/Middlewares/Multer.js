@@ -31,8 +31,9 @@ const attachImageUpload=multer({
     
 })
 
+
 const attachyMulter=attachImageUpload.array("Afiles",5)
 
 const attachmentsMulter=multerUpload.array('files',5);
 
-module.exports={multerUpload,attachmentsMulter,attachyMulter}
+module.exports={multerUpload,attachmentsMulter,attachyMulter,attachImageUpload}

@@ -18,8 +18,9 @@ const AddMemberDialog=lazy(()=>import("../components/dialog/AddMemberDialog"));
 const GroupList=({w="100%",myGroups=[],chatId})=>(
     <Stack width={w} sx={{
         bgcolor:"#18191A",
-        
-    }} spacing={"1rem"} height={"100vh"} 
+        paddingTop:'1rem'
+        }}
+     spacing={"1rem"} height={"100vh"} 
     overflow={"auto"}   >
         {myGroups.length>0 ? (
             myGroups.map((group)=><GroupListItem group={group} chatId={chatId} key={group._id}/>)
@@ -38,8 +39,22 @@ const GroupListItem=memo(({group,chatId})=>{
         if(chatId === _id) e.preventDefault();
     }}>
         <Stack direction={"row"} spacing="1rem" alignItems={"center"}  >
-            <Stack direction={"row"}>{avatar.map((u,index)=><Avatar src={u} key={`ava${_id}${index}`}>
-            </Avatar>)}
+            <Stack direction={"row"} sx={{ position: "relative" }}>
+              {
+              avatar.slice(0,3).map((u,index)=>(
+                <Avatar src={u} key={`ava${_id}${index}`} 
+                sx={{
+                  zIndex:avatar.length-index,
+                  position:'relative',
+                  left: index === 0 ? 0 : -11 * index,
+
+                }}
+                />
+              ))    
+                
+                // avatar.map((u,index)=><Avatar src={u} key={`ava${_id}${index}`}>
+            // </Avatar>)
+              }
             </Stack>
 
             <Typography variant="caption">{name}</Typography>
@@ -262,7 +277,7 @@ const Groups=()=>{
             <Grid item sm={4} lg={4} sx={{
                 display:{xs:"none",sm:"block"},
                 bgcolor:"rgba(0,0,0,0.8)",
-                overflow:"auto"
+                overflow:"auto",
                 }}>
                 <GroupList myGroups={myGroups?.data?.GChats} chatId={chatId}  />
             </Grid>

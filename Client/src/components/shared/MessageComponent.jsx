@@ -18,13 +18,13 @@ const MessageComponent =({message,user,setPage,reff,index,totalPages,page})=>{
             }
         });
         if(reff){
-            observer.observe(reff.current)
+            observer?.observe(reff.current)
         }
         
         return ()=> {
             if (reff && reff.current){
                 console.log("madarbh")
-                observer.unobserve(reff.current);
+                observer?.unobserve(reff.current);
             }
         }
 

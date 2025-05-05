@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Stack, Typography } from "@mui/material";
 import {Link} from "../styled/StyleComponents";
 import { memo } from 'react';
 import DeleteChatMenuDialog from "../dialog/DeleteChatMenuDialog";
@@ -15,7 +15,8 @@ const ChatItem=({
     newMsgsAlert,
     handleDelteChatOpen,
     deleteMenuAnchor,
-    index
+    index,
+    avatar
 })=>{
     return(
         <>
@@ -36,9 +37,25 @@ const ChatItem=({
                 color:sameSender?"white":"unset",
                 position:"relative"
             }} >
-
+            
+            <Box sx={{ position: "relative", display: "flex" }}>
+        {avatar.slice(0, 3).map((u, index) => (
+          <Avatar
+            key={u + index}
+            src={u}
+            sx={{
+              position: "relative",
+              left: index === 0 ? 0 : -9 * index,
+              zIndex: 3 - index,
+            }}
+          />
+        ))}
+      </Box>
+           
             <Stack >
+                    
                 <Typography >{name}</Typography>
+                
                 {
                     newMsgsAlert &&(
                         <Typography varient="h6">{newMsgsAlert.count}+ new Msg</Typography>

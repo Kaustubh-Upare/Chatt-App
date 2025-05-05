@@ -32,11 +32,10 @@ function App() {
   useEffect(()=>{
     // console.log(server);
     axios.get(`${server}/user/me`,{ withCredentials:true })
-          .then(({data})=>dispatch(userExists({data})))
+          .then(({data})=>dispatch(userExists(data.data)))
           .catch((err)=>dispatch(userNotExists()))
   },[])
 
- 
 
   return (
     <>

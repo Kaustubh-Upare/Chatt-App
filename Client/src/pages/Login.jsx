@@ -26,7 +26,8 @@ const Login=()=>{
 
     const handleImageChange=(e)=>{
         const selectedfile=e.target.files[0];
-        console.log(e.target.files.path)
+        console.log(e.target.files)
+        console.log(selectedfile)
         if(selectedfile){
             setImage(URL.createObjectURL(selectedfile));
             console.log(URL.createObjectURL(selectedfile))
@@ -34,7 +35,7 @@ const Login=()=>{
         }
     }
 
-    const handleLogin=async (e)=>{
+    const handleLogin=async(e)=>{
         e.preventDefault();
         console.log(username);
         console.log(password);
@@ -80,11 +81,8 @@ const Login=()=>{
             dispatch(userExists(true))
             toast.success(data.message)
         } catch (error) {
-            toast.error(error?.response?.data?.message || "Something Went Wrong")
-                   
+            toast.error(error?.response?.data?.message || "Something Went Wrong")          
         }
-
-
     }
 
 
@@ -109,7 +107,7 @@ const Login=()=>{
         >
             {Login ? (
                 <>
-                <Typography  variant="button" fontSize={"50px"} color="" >Login</Typography>
+                <Typography  variant="button" fontSize={"50px"}  >Login</Typography>
                 <form style={{
                     width:"100%",
                     marginTop:"1rem"
@@ -177,7 +175,7 @@ const Login=()=>{
                     alignItems: "center",
                     position:"relative"
                 }}>
-                    <Avatar alt="Remy Sharp" src={image} sx={{
+                    <Avatar alt="Image" src={image} sx={{
                         width:"10rem",
                         height:"10rem",
                         
