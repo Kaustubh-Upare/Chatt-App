@@ -15,6 +15,7 @@ const ChatList=({
 })=>{
     const dispatch=useDispatch();
 
+    console.log('Checking New',chats)
     const deleteMenuAnchor=useRef(null);
    
     const handleDeleteChat=(e,chatId,groupChat)=>{
@@ -30,7 +31,7 @@ const ChatList=({
         <Stack  width={w} direction="column" sx={{bgcolor:"#191D1D"}} height={"100%"} >
             {
                 chats?.map((data,index)=>{
-                    const {_id,name,groupChat,members}=data;
+                    const {_id,name,groupChat,members,avatar}=data;
                  // const isOnline=onlineUsers.includes(_id );
                     
                     const newMsgPop=newMessagesAlert.find((alert)=>alert.chatId ===_id);
@@ -44,6 +45,7 @@ const ChatList=({
                         handleDelteChatOpen={handleDeleteChat}
                         deleteMenuAnchor={deleteMenuAnchor}
                         index={index}
+                        avatar={avatar}
                     />
                 })
             }

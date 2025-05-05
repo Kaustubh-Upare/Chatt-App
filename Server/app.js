@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express=require("express");
 const connectDB = require("./Util/DbConnect.js");
 const { errorMiddleware } = require("./Middlewares/error.js");
@@ -40,8 +42,9 @@ app.set("io",io)
 // Middleware
 app.use(cors(corsOption))
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended: true }));
 app.use(cookieParser())
+
 
 
 // Routes

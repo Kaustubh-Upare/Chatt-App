@@ -16,27 +16,27 @@ const newUSer=tryCatcher(async(req,res,next)=>{
     console.log(req.body);
 
     const file=req.file;
-    console.log(file);
-    // if(!file) return next(new ErrorHandler("Please Upload Avatar",404)) 
+    console.log('tum file ho',file);
+    if(!file) return next(new ErrorHandler("Please Upload Avatar",404)) 
 
-    //     const result=await uploadToCloudinary([file]);
+        const result=await uploadToCloudinary([file]);
 
-    // const avtaar={
-    //     public_id:result[0].public_id,
-    //     url:result[0].url
-    // }
-    // console.log(avataar)
+    const avtaar={
+        public_id:result[0].public_id,
+        url:result[0].url
+    }
+    console.log(avtaar)
 
-    // const user=await User.create({
-    //     name,
-    //     username,
-    //     password,
-    //     avatar:avtaar,
-    // })
+    const user=await User.create({
+        name,
+        username,
+        password,
+        avatar:avtaar,
+    })
 
-    // sendToken(res,user,201,"User Created")
+    sendToken(res,user,201,"User Created")
 
-    // res.status(201).json({message:"User Created Succesfully"});
+    res.status(201).json({message:"User Created Succesfully"});
 })
 
 
@@ -47,9 +47,11 @@ const login=tryCatcher(async (req,res,next)=>{
         console.log(password)
         if(!u) return next(new ErrorHandler("Invalid Username",400));
 
-    const isMatch=await compare(password,u.password);
+        
+    // const isMatch=await compare(password,u.password);
+    // console.log(isMatch);
 
-    if(!isMatch) return next(new Error("Invalid Password"));
+    // if(!isMatch) return next(new Error("Invalid Password"));
     
     sendToken(res,u,201,"Welcome Back");
 
@@ -57,10 +59,19 @@ const login=tryCatcher(async (req,res,next)=>{
 
 
 const getMyProfile=tryCatcher(async(req,res,next)=>{
+    const pro=await User.findById(req.user).select('-password')
+    if (!pro) return next(new ErrorHandler("User not found", 404)); 
+    
     res.status(201).json({
         success:true,
-        data:req.user
+        data:pro
     })
+})
+const getProfileDetails=tryCatcher(async(req,res,next)=>{
+    const pro=await User.findById(req.user).select('-password')
+    if (!pro) return next(new ErrorHandler("User not found", 404));
+
+    res.status(200).json({success:true,pro})
 })
 
 const logout=tryCatcher(async(req,res,next)=>{
@@ -235,5 +246,5 @@ const getFriends=tryCatcher(async(req,res,next)=>{
 
 module.exports={
     login,newUSer,getMyProfile,logout,searchUser,sendFriendRequest
-    ,acceptFriendRequest,getAllNotifications,getFriends,
+    ,acceptFriendRequest,getAllNotifications,getFriends,getProfileDetails
 }

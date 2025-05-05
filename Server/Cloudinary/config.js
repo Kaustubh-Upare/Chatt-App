@@ -4,16 +4,15 @@ const { ErrorHandler } = require('../Util/utility')
 
 
 cloudinary.config({
-    cloud_name:"dverurr4w",
-    api_key:"937462588262341",
-    api_secret:"cIp9MY_gE3R_FlfG6KTGVculRBM",
+    cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
+    api_key:process.env.CLOUDINARY_API_KEY,
+    api_secret:process.env.CLOUDINARY_API_SECRET,
 })
 
 const uploadToCloudinary=async(files)=>{
     const UploadPromises=files.map((fil)=>{
         return new Promise((resolve,reject)=>{
             console.log(fil.path)
-
              cloudinary.uploader.upload(
                 fil.path,{
                     resource_type:"auto",
