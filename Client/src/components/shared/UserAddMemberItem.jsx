@@ -2,15 +2,14 @@ import { Avatar, IconButton, Stack, Typography } from "@mui/material";
 import { Add as AddIcon ,Remove as RemoveIcon} from "@mui/icons-material";
 
 
-const UserAddGroupItem=({user,selectedMemberUi,selectedMembers,removeMembers,isAdded})=>{
+const UserAddMemberItem=({user,selectedMemberUi,selectedMembers,removeMembers,isAdded})=>{
     console.log("haa",user)
     const {name,_id,avatar}=user;
-
     return(
         <Stack direction={"row"} spacing={"1rem"}  width={"100%"} alignItems={"center"} sx={{
             my:"10px"
         }}>
-            <Avatar src={avatar.url}/>
+            <Avatar src={avatar}/>
             <Typography variant="button" sx={{
                 flexGrow:"1",
                 // bgcolor:"red",
@@ -33,4 +32,4 @@ const UserAddGroupItem=({user,selectedMemberUi,selectedMembers,removeMembers,isA
     )
 }
 
-export default UserAddGroupItem;
+export default UserAddMemberItem;

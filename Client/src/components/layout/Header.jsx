@@ -1,4 +1,4 @@
-import { AppBar, Backdrop, Badge, Box, IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
+import { AppBar, Backdrop, Badge, Box, IconButton, Toolbar, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import {Bolt,Menu as MenuIcon,Search as SearchIcon,Add as AddIcon,Notifications as NotifyIcon,Group as GroupIcon,Logout as LogoutIcon} from '@mui/icons-material'
 import {useNavigate} from "react-router-dom"
 import { lazy, Suspense, useState } from "react";
@@ -16,7 +16,7 @@ const Header=()=>{
     const dispatch=useDispatch();
     const {isMobileMenu,isSearch,isNotifications,isNewGroup}=useSelector((state)=> state.misc)
     const {notificationCount}=useSelector((state)=>state.chat)
-
+    const isSmall = useMediaQuery("(max-width:600px)")
     // const handleMobileMenu=()=> ;
     
 
@@ -33,7 +33,7 @@ const Header=()=>{
         
         return (
             <Tooltip title={title}>
-                <IconButton size="large" onClick={onClick}>
+                <IconButton size={isSmall ? 'small' :'large'} onClick={onClick}>
                     {
                         {value} ? (<Badge badgeContent={value} color="error">{icon}</Badge>)
                             :({icon})

@@ -87,13 +87,18 @@ const Login=()=>{
 
 
     return(    
-    <Container component={"main"} maxWidth="xs" sx={{
+    <Container component={"main"}  sx={{
         height:"100vh",
+        width:'100vw',
         display:"flex",
         justifyContent:"center",
         alignItems:"center",
+        backgroundColor: "rgba(24, 24, 24, 0.71)", // semi-transparent dark
+    backdropFilter: "blur(8px)", // blur effect
+    WebkitBackdropFilter: "blur(8px)", // for Safari support
     }}>
         <Paper
+            
             elevation={16}
             sx={{
                 padding:4,
@@ -102,12 +107,14 @@ const Login=()=>{
                 alignItems:"center",
                 bgcolor:"#191D1D",
                 color:"white",
-                boxShadow: '1px 8px 18px rgb(14, 202, 235)'
+                border:'1px solid rgba(112, 112, 112, 0.38)',
+              borderRadius:'12px'
+                // boxShadow: '1px 8px 18px rgb(14, 202, 235)'
             }}
         >
             {Login ? (
                 <>
-                <Typography  variant="button" fontSize={"50px"}  >Login</Typography>
+                <Typography  variant="button" fontSize={{xs:'35px',sm:'50px'}} >Login</Typography>
                 <form style={{
                     width:"100%",
                     marginTop:"1rem"
@@ -122,10 +129,22 @@ const Login=()=>{
                     onChange={(e)=>setUsername(e.target.value)}
                     
                     sx={{
-                        
-                        "& label": { color: "white" },
-                        "& label.Mui-focused": { color: "rgb(14, 202, 235)" },
-                        "&:hover label": { color: "rgb(11, 153, 179)" },
+                        "& label": { color: "rgb(255, 0, 43)" },
+                        "& label.Mui-focused": { color: "rgba(248, 0, 41, 0.91)" },
+                        "&:hover label": { color: "rgb(255, 16, 16)" },
+
+                        // underline (border) styles
+                        "& .MuiInput-underline:before": {
+                            borderBottomColor: "rgba(247, 15, 53, 0.5)", // default
+                        },
+                        "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+                            borderBottomColor: "rgb(179, 11, 11)", // on hover
+                        },
+                        "& .MuiInput-underline:after": {
+                            borderBottomColor: "rgba(248, 0, 41, 0.91)", // on focus
+                        },
+
+
                       }}
 
                     />
@@ -138,24 +157,37 @@ const Login=()=>{
                     margin="normal" variant="standard" 
                     value={password}
                     onChange={(e)=>setPassword(e.target.value)}
+                    
                     sx={{
                         
-                        "& label": { color: "white" },
-                        "& label.Mui-focused": { color: "rgb(14, 202, 235)" },
-                        "&:hover label": { color: "rgb(11, 153, 179)" },
-                      }}
+                        "& label": { color: "rgb(255, 0, 43)" },
+                        "& label.Mui-focused": { color: "rgba(248, 0, 41, 0.91)" },
+                        "&:hover label": { color: "rgb(255, 16, 16)" },
 
+                        // underline (border) styles
+                        "& .MuiInput-underline:before": {
+                            borderBottomColor: "rgba(247, 15, 53, 0.5)", // default
+                        },
+                        "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+                            borderBottomColor: "rgb(179, 11, 11)", // on hover
+                        },
+                        "& .MuiInput-underline:after": {
+                            borderBottomColor: "rgba(248, 0, 41, 0.91)", // on focus
+                        },
+
+                      }}
                     />
                 <Button 
-                sx={{marginTop:"1rem",marginBottom:"1rem",boxShadow:"17px 10px 23px -11px skyblue"}} 
-                variant="contained" color="#212121" type="submit" fullWidth
+                sx={{marginTop:"1rem",marginBottom:1
+                    // ,boxShadow:"17px 10px 23px -11px skyblue"
+                }} 
+                variant="outlined" color="warning" type="submit" fullWidth
                 onClick={handleLogin}
-                
                 >
                     Login
                 </Button>
                 
-                <Typography textAlign={"center"}>OR</Typography>
+                <Typography textAlign={"center"} marginBottom={1}>OR</Typography>
 
                 <Button  
                 variant="outlined"

@@ -25,9 +25,15 @@ const GroupList=({w="100%",myGroups=[],chatId})=>(
         {myGroups.length>0 ? (
             myGroups.map((group)=><GroupListItem group={group} chatId={chatId} key={group._id}/>)
         )    : (
-            <Typography>
+            <Stack height={'100%'} >
+                 <Typography color="White" textAlign={'center'}>
                 No Groups Available
             </Typography>
+            <Typography color="warning" textAlign={'center'} marginTop={3} >
+                Create An Group To View The Details
+            </Typography>
+            </Stack>
+           
             )}
     </Stack>
 )
@@ -273,7 +279,7 @@ const Groups=()=>{
     return(
         myGroups.isLoading?<LayoutLoaders />
         :<>
-        <Grid container height={"100vh"}>
+        <Grid container height={"100vh"} >
             <Grid item sm={4} lg={4} sx={{
                 display:{xs:"none",sm:"block"},
                 bgcolor:"rgba(0,0,0,0.8)",
@@ -287,7 +293,8 @@ const Groups=()=>{
                 flexDirection:"column",
                 alignItems:"center",
                 position:"relative",
-                bgcolor:"#111217"
+                bgcolor:"#111217",
+                paddingX:2
             }}>
                 <IconBtn />
                 {groupName?( 

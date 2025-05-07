@@ -17,7 +17,14 @@ const Notifications=()=>{
 
     return(
         <Stack direction={"column"} alignItems={"center"} >
-        <Dialog open onClose={NotificationCloseHandler}>
+        <Dialog open onClose={NotificationCloseHandler}  
+        PaperProps={{
+            sx: {
+              backgroundColor: "#191D1D", // change this to your desired color
+              color: "white", // optional: change text color too
+            },
+          }}
+        >
             <DialogTitle  textAlign={"center"}>
               {isLoading?<Skeleton /> :
               <>

@@ -9,6 +9,7 @@ import { useAvailableFriendsQuery, useCNewGroupMutation } from "../../redux/api/
 import { setIsNewGroup } from "../../redux/reducers/misc";
 import toast from "react-hot-toast";
 import { useAsyncMutation } from "../../hooks/hook";
+import UserAddMemberItem from "../shared/UserAddMemberItem";
 const Add=()=>{
     const dispatch=useDispatch();
     const {isNewGroup}=useSelector((state)=>state.misc)
@@ -67,7 +68,7 @@ const Add=()=>{
                 { 
                 isLoading?<Skeleton />
                 :(data?.ff.map((user)=>(
-                        <UserAddGroupItem selectedMemberUi={selectedMemberUi} selectedMembers={selectedMembers}
+                        <UserAddMemberItem selectedMemberUi={selectedMemberUi} selectedMembers={selectedMembers}
                         user={user}
                         key={user._id} 
                         isAdded={false}
@@ -76,7 +77,7 @@ const Add=()=>{
                     <Stack direction={"row"} justifyContent={"space-evenly"}>
                 <Button variant="outlined" onClick={createHandler} disabled={newGroupLoading} >Create</Button>
                 <Tooltip title="Cancel">
-                <Button color="error" variant="outlined"><CancelIcon /></Button>
+                <Button color="error" variant="outlined" onClick={()=> dispatch(setIsNewGroup(false))} ><CancelIcon /></Button>
                 </Tooltip>
             </Stack>
                 </List>

@@ -48,7 +48,7 @@ const Profile=()=>{
           },
           mb: 2,
         }} 
-        src={user.avatar.url}
+        src={user.avatar?.url}
         />
         {/* <Stack direction={'row'} width={'100%'}>
 

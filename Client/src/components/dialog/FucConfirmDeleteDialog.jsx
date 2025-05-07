@@ -9,10 +9,19 @@ const FucConfirmDeleteDialog=({open,handleclose,deleteGroup,chatId})=>{
         navigate('/groups')
     }
     return(
-        <Dialog open={open} onClose={handleclose} >
+        <Dialog open={open} onClose={handleclose} 
+        PaperProps={{
+            sx: {
+              backgroundColor: "#191D1D", // change this to your desired color
+              color: "white", // optional: change text color 
+              border:'1px solid rgba(112, 112, 112, 0.38)',
+              borderRadius:'12px'
+            },
+          }}
+        >
             <DialogTitle>Confirm Delete</DialogTitle>
             <DialogContent>
-                <DialogContentText>R u Sure u want to Delete this Group</DialogContentText>
+                <DialogContentText color="white">R u Sure u want to Delete this Group</DialogContentText>
             </DialogContent>
             <DialogActions>
 
