@@ -5,7 +5,10 @@ import { lazy, Suspense, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsMobileMenu, setIsNewGroup, setIsNotifications, setIsSearch, } from "../../redux/reducers/misc";
 import { resetNotification } from "../../redux/reducers/chat";
-
+import { server } from "../constants/config.js"
+import toast from "react-hot-toast";
+import axios from "axios";
+import { userNotExists } from "../../redux/reducers/auth.js";
 
 const SearchDialog =lazy(()=> import("../specific/Search"));
 const AddDialog =lazy(()=> import("../specific/Add"));
@@ -65,7 +68,18 @@ const Header=()=>{
     const NavigateToGrp=()=>{
         navigate("/groups")
     }
-    const LogoutBtn=()=>{
+    const LogoutBtn=async()=>{
+        const toastId=toast.loading('logging you Out...');
+        try {
+            await axios.get(`${server}/user/logout`,{
+                withCredentials:true
+            })
+            dispatch(userNotExists())
+            toast.success('Logged You Out',{id:toastId})
+            navigate("/login")
+        } catch (error) {
+            toast.error(error?.response?.data?.message || "Something went wrong",{id:toastId});
+        }
         navigate("/login")
     }
     
@@ -83,7 +97,7 @@ const Header=()=>{
                     color:"#A879F8",
                     padding:"1rem",    
                     display:{xs:"none", sm:"block"}
-                }} ><Bolt sx={{color:"#E90109",}} /> Socket IO
+                }} ><Bolt sx={{color:"#E90109",}} /> Chattu
                 </Typography>
                 
                 

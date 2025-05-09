@@ -22,6 +22,7 @@ const Notifications=()=>{
             sx: {
               backgroundColor: "#191D1D", // change this to your desired color
               color: "white", // optional: change text color too
+              border:'1px solid rgb(65, 64, 64)',borderRadius:'10px'
             },
           }}
         >

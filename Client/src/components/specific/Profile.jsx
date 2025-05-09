@@ -1,8 +1,11 @@
 import { Avatar, Stack, Typography } from "@mui/material";
 import {ElectricBolt, Face,Instagram, Person} from "@mui/icons-material"
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const Profile=()=>{
+
+
     const ProfileCard=({text,Icon,heading})=>(
         
             <Stack direction={"row"} alignItems={'center'} color={"white"} textAlign={"center"} spacing={1} >
@@ -33,6 +36,7 @@ const Profile=()=>{
     const {user}=useSelector((state)=>state.auth)
     console.log('profukeee',user)
     
+
     return(
         <Stack direction={"column"} spacing={"1rem"} alignItems={"center"} sx={{width:'100%',height:'100%'}}>
         <Avatar sx={{

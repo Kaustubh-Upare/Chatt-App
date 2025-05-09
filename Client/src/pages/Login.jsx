@@ -1,6 +1,9 @@
-import { Container, Paper, Typography ,TextField,Button, Avatar,Stack, IconButton, Grid, InputAdornment} from "@mui/material"
+import { Container, Paper, Typography ,TextField,Button, Avatar,Stack, 
+    IconButton, Grid, InputAdornment,Box,
+    useTheme,
+    useMediaQuery} from "@mui/material"
 import { useState } from "react";
-import {CameraAlt as CameraAltIcon,Lock as LockIcon,AccountCircle } from "@mui/icons-material"
+import {CameraAlt,Lock as LockIcon,AccountCircle,Description as DescIcon } from "@mui/icons-material"
 import {VisuallyHiddenInput} from "../components/styled/StyleComponents"
 import axios from "axios";
 import { server } from "../components/constants/config";
@@ -11,6 +14,9 @@ import LoginImage from '../assets/LoginImage.jpg';
 
 const Login=()=>{
     
+    const theme = useTheme();
+        const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+      
     const dispatch=useDispatch();
     const [Login,setLogin]=useState(true);
     const [image, setImage] = useState(null);
@@ -19,7 +25,7 @@ const Login=()=>{
     const [name,setName]=useState("");
     const [bio,setBio]=useState("");
     const [file,setFile]=useState(null)
-    
+    const [isLoading,setIsLoading]=useState(false);
 
     const toggleLogin=()=>{
         setLogin(!Login);
@@ -40,30 +46,34 @@ const Login=()=>{
         e.preventDefault();
         console.log(username);
         console.log(password);
-       
+       setIsLoading(true);
         const config={
             withCredentials:true,
             headers:{
                 "Content-Type":"application/json",
             }
         }   
-
+        const toasId=toast.loading('Logging you...');
         try {
             const {data} =await axios.post(`${server}/user/login`,{
                 username:username,
                 password:password
                 },config);
             dispatch(userExists(true))
-            toast.success(data.message)
+            toast.success(data.message,{id:toasId})
+            
         } catch (error) {
-            toast.error(error?.response?.data?.message || "Something Went Wrong")
+            toast.error(error?.response?.data?.message || "Something Went Wrong",{id:toasId})
+        }finally{
+            setIsLoading(false);
         }
         
     }
 
     const handleRegister=async(e)=>{
         e.preventDefault();
-        
+        setIsLoading(true);
+        const toastId=toast.loading('Great Things Take Time King...');
         const frmData=new FormData();
         frmData.append("name",name);
         frmData.append("bio",bio);
@@ -80,48 +90,59 @@ const Login=()=>{
         try {
             const {data}=await axios.post(`${server}/user/new`,frmData,config)
             dispatch(userExists(true))
-            toast.success(data.message)
+            toast.success(data.message,{id:toastId})
         } catch (error) {
-            toast.error(error?.response?.data?.message || "Something Went Wrong")          
+            toast.error(error?.response?.data?.message || "Something Went Wrong",{id:toastId})          
+        }finally{
+            setIsLoading(false);
         }
     }
 
 
     return(    
-    <Container component={"main"}  sx={{
-        height:"100vh",
-        width:'100vw',
-        display:"flex",
-        justifyContent:"center",
-        alignItems:"center",
-        background: "linear-gradient(to-bottom,#121212,rgb(63, 63, 63))", // semi-transparent dark
-    backdropFilter: "blur(8px)", // blur effect
-    WebkitBackdropFilter: "blur(8px)", // for Safari support
-    }}>
-        <Paper
-            
-            elevation={16}
-            sx={{
-                padding:0,
-                display:"flex",
-                flexDirection:"column",
-                alignItems:"center",
-                bgcolor:"#191D1D",
-                color:"white",
-                border:'1px solid rgba(112, 112, 112, 0.38)',
-              borderRadius:'12px',
-                // boxShadow: '1px 8px 18px rgb(14, 202, 235)'
-            }}
-        >
+<Box
+      sx={{
+        height: '100vh',
+        background: 'linear-gradient(to bottom, #121212, #1e1e1e)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
+        // overflow: 'hidden',
+        color: '#fff',
+        padding: isMobile ? 3 : 0, // Add padding for better mobile view
+      }}
+    >
+         <Grid container spacing={0} sx={{  width: '100%',height:'100%',alignItems:'center'}}>
+        {/* Right Panel (Character + Chat Bubbles) */}
+        <Grid item sm={6} sx={{
+             display: {xs:'none',sm:'flex'}, justifyContent: 'center', alignItems: 'center',
+             position: 'relative',
+             overflow: 'hidden',
+             height: '100%',
+             }}> {/* Added overflow: 'hidden' for potential clipping */}
+  
+  <img
+    src={'https://wallpapercave.com/dwp1x/wp8994439.jpg'}
+    alt="Character"
+    style={{
+      width: '80%',
+      height:'100%',
+      objectFit: 'contain',
+      zIndex: 2, // Ensure the image is above the overlay
+      mixBlendMode: 'hard-light', // Experiment with blending modes
+      opacity: 0.4, // Adjust image opacity if needed
+    //   borderRadius:'20px'
+    }}
+  />
+          
+        </Grid>
 
-            <Grid container height={'100%'} width={'100%'} spacing={2}>
-                <Grid item sm={6} sx={{display:{xs:'none',sm:'block'}}}>
-                    <img src={LoginImage} height={'100%'} width={'100%'} style={{borderRadius:'20px'}} />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                {Login ? (
+        {/* Left Panel */}
+        <Grid item xs={12} sm={6} sx={{ p:2, display: 'flex', overflowY:'auto',flexDirection: 'column', justifyContent: 'center' }}>
+        {Login ? (
                 <>
-                <Typography  variant="button" fontSize={{xs:'35px',sm:'50px'}} >Login</Typography>
+                <Typography  variant="button" fontSize={{xs:'35px',sm:'50px'}} textAlign={'center'} >Login</Typography>
                 <form style={{
                     width:"100%",
                     marginTop:"1rem"
@@ -142,6 +163,7 @@ const Login=()=>{
       </InputAdornment>
     ),
   }}
+
   sx={{
     borderRadius: '8px',
     '& .MuiOutlinedInput-root': {
@@ -162,6 +184,9 @@ const Login=()=>{
       '&:hover': {
         backgroundColor: 'rgba(0, 0, 0, 0.08)',
       },
+      '& input': {
+        color: 'rgb(207, 207, 207)',
+      },
     },
     '& label': {
       color: 'rgba(207, 207, 207, 0.6)',
@@ -172,7 +197,7 @@ const Login=()=>{
   }}
 />
                     
-                    <TextField
+    <TextField
       required
       fullWidth
       type="password"
@@ -197,6 +222,9 @@ const Login=()=>{
           '&:hover fieldset': {
             borderColor: 'rgba(255, 255, 255, 0.4)',
           },
+          '& input': {
+        color: 'rgb(207, 207, 207)',
+      },
           '&.Mui-focused fieldset': {
             borderColor: 'grey',
           },
@@ -238,115 +266,244 @@ const Login=()=>{
                 </form>
                 </>
             ) :  <>
-            <Typography variant="h5">Register</Typography>
+            <Typography variant="h5" textAlign={'center'}>Register</Typography>
             <form style={{
                 width:"100%",
             }}>
-                <Stack direction="column" sx={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    position:"relative"
-                }}>
-                    <Avatar alt="Image" src={image} sx={{
-                        width:"10rem",
-                        height:"10rem",
-                        
-                    }}>
-                    
-                    </Avatar>
-                    <IconButton sx={{
-                        position:"absolute",
-                        top:100,
-                        right:80,
-                    }}
-                        onClick={() => document.getElementById("hidden-input").click()}
-                    >
-                        <>
-                        <CameraAltIcon sx={{color:"black"}} />
-                        <VisuallyHiddenInput type="file" id="hidden-input" onChange={handleImageChange}/>
-                        </>
-                    </IconButton>
+                {/* <Stack
+  direction="column"
+  sx={{
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+  }} */}
+{/* > */}
+    <div style={{position:'relative',display:'flex',justifyContent:'center'}}>
+    <Avatar
+    alt="Image"
+    src={image}
+    sx={{
+      width: { xs: "8rem", sm: "10rem", md: "10rem" },
+      height: { xs: "8rem", sm: "10rem", md: "10rem" },
+    }}
+  />
+  <IconButton
+    sx={{
+      position: "absolute",
+    //   bottom: { xs: "1rem", sm: "1.5rem", md: "1.5rem" }, // Position relative to bottom of Avatar
+    //   right: { xs: "1rem", sm: "1.5rem", md: "11.5rem" }, // Position relative to right of Avatar
+    bottom: "0.3rem",
+    right: "5rem", 
+        // { xs: "1rem", sm: "1.5rem", md: "11.5rem" },
+       
+    //   backgroundColor: "white", // Optional: Add background for better visibility
+      "&:hover": { backgroundColor: "rgba(8, 8, 8, 0.8)" }, // Optional: Hover effect
+    }}
+    onClick={() => document.getElementById("hidden-input").click()}
+  >
+    <CameraAlt sx={{ color: "grey" }} />
+    
+  </IconButton>
 
-                </Stack>
-
+    </div>
+  
+{/* </Stack> */}
+<VisuallyHiddenInput type="file" id="hidden-input" onChange={handleImageChange} />         
                 
-
-                <TextField 
-                required 
-                fullWidth 
-                label="Name" 
-                margin="normal" variant="standard" 
-                value={name}
+<TextField 
+  required 
+  fullWidth 
+  label="Name" 
+  margin="normal"
+  variant="outlined"
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+  InputProps={{
+    startAdornment: (
+      <InputAdornment position="start">
+        <AccountCircle />
+      </InputAdornment>
+    ),
+  }}
+  sx={{
+    borderRadius: '8px',
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'rgba(255, 255, 255, 0.2)',
+      },
+      '&:hover fieldset': {
+        borderColor: 'rgba(255, 255, 255, 0.4)',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'grey',
+      },
+      '& input': {
+        color: 'rgb(207, 207, 207)',
+      },
+      '&.Mui-focused': {
+        backgroundColor: 'rgba(0, 0, 0, 0.08)',
+        boxShadow: 'none', // remove blue glow
+      },
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+      '&:hover': {
+        backgroundColor: 'rgba(0, 0, 0, 0.08)',
+      },
+    },
+    '& label': {
+      color: 'rgba(207, 207, 207, 0.6)',
+    },
+    '& label.Mui-focused': {
+      color: 'rgb(231, 229, 229)',
+    },
+  }}
+/>
                 
-                onChange={(e)=>(setName(e.target.value))}
-                sx={{
-                    input:{color:"white"},
-                    "& .MuiInput-underline:before": { borderBottomColor: "skyblue" },
-                    "& .MuiInput-underline:hover:before": { borderBottomColor: "#0ec6f0" }, 
-                    "& .MuiInput-underline:after": { borderBottomColor: "#c70ef0" },
-                        
-                    "& label": { color: "white" },
-                    "& label.Mui-focused": { color: "rgb(14, 202, 235)" },
-                    "&:hover label": { color: "rgb(11, 153, 179)" },
-                  }}
-                />
-                <TextField 
-                fullWidth 
-                label="Bio" 
-                margin="normal" variant="standard" 
-                value={bio}
-                onChange={(e)=>setBio(e.target.value)}
-                sx={{
-                    input:{color:"white"},
-                    "& .MuiInput-underline:before": { borderBottomColor: "skyblue" },
-                    "& .MuiInput-underline:hover:before": { borderBottomColor: "#0ec6f0" }, 
-                    "& .MuiInput-underline:after": { borderBottomColor: "#c70ef0" },
-                        
-                    "& label": { color: "white" },
-                    "& label.Mui-focused": { color: "rgb(14, 202, 235)" },
-                    "&:hover label": { color: "rgb(11, 153, 179)" },
-                  }}
-                />
+<TextField 
+  required 
+  fullWidth 
+  label="Bio" 
+  margin="normal"
+  variant="outlined"
+  value={bio}
+  onChange={(e) => setBio(e.target.value)}
+  InputProps={{
+    startAdornment: (
+      <InputAdornment position="start">
+        <DescIcon />
+      </InputAdornment>
+    ),
+  }}
+  sx={{
+    borderRadius: '8px',
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'rgba(255, 255, 255, 0.2)',
+      },
+      '&:hover fieldset': {
+        borderColor: 'rgba(255, 255, 255, 0.4)',
+      },
+      '& input': {
+        color: 'rgb(207, 207, 207)',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'grey',
+      },
+      '&.Mui-focused': {
+        backgroundColor: 'rgba(0, 0, 0, 0.08)',
+        boxShadow: 'none', // remove blue glow
+      },
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+      '&:hover': {
+        backgroundColor: 'rgba(0, 0, 0, 0.08)',
+      },
+    },
+    '& label': {
+      color: 'rgba(207, 207, 207, 0.6)',
+    },
+    '& label.Mui-focused': {
+      color: 'rgb(231, 229, 229)',
+    },
+  }}
+/>
                 
                
-                <TextField 
-                required 
-                fullWidth 
-                label="Username" 
-                margin="normal" variant="standard" 
-                value={username}
-                onChange={(e)=>setUsername(e.target.value)}
-                sx={{
-                    input:{color:"white"},
-                    "& .MuiInput-underline:before": { borderBottomColor: "skyblue" },
-                    "& .MuiInput-underline:hover:before": { borderBottomColor: "#0ec6f0" }, 
-                    "& .MuiInput-underline:after": { borderBottomColor: "#c70ef0" },
-                        
-                    "& label": { color: "white" },
-                    "& label.Mui-focused": { color: "rgb(14, 202, 235)" },
-                    "&:hover label": { color: "rgb(11, 153, 179)" },
-                  }}
-                />
                 
-                <TextField 
-                required 
-                fullWidth 
-                type="password"
-                label="Password" 
-                margin="normal" variant="standard" 
-                value={password}
-                onChange={(e)=>setPassword(e.target.value)}
-                sx={{
-                    input:{color:"white"},
-                    "& .MuiInput-underline:before": { borderBottomColor: "skyblue" },
-                    "& .MuiInput-underline:hover:before": { borderBottomColor: "#0ec6f0" }, 
-                    "& .MuiInput-underline:after": { borderBottomColor: "#c70ef0" },
-
-                    "& label": { color: "white" },
-                    "& label.Mui-focused": { color: "rgb(14, 202, 235)" },
-                    "&:hover label": { color: "rgb(11, 153, 179)" },
-                  }}
-                />
+<TextField 
+  required 
+  fullWidth 
+  label="Username" 
+  margin="normal"
+  variant="outlined"
+  value={username}
+  onChange={(e) => setUsername(e.target.value)}
+  InputProps={{
+    startAdornment: (
+      <InputAdornment position="start">
+        <AccountCircle />
+      </InputAdornment>
+    ),
+  }}
+  sx={{
+    borderRadius: '8px',
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'rgba(255, 255, 255, 0.2)',
+      },
+      '&:hover fieldset': {
+        borderColor: 'rgba(255, 255, 255, 0.4)',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'grey',
+      },
+      '& input': {
+        color: 'rgb(207, 207, 207)',
+      },
+      '&.Mui-focused': {
+        backgroundColor: 'rgba(0, 0, 0, 0.08)',
+        boxShadow: 'none', // remove blue glow
+      },
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+      '&:hover': {
+        backgroundColor: 'rgba(0, 0, 0, 0.08)',
+      },
+    },
+    '& label': {
+      color: 'rgba(207, 207, 207, 0.6)',
+    },
+    '& label.Mui-focused': {
+      color: 'rgb(231, 229, 229)',
+    },
+  }}
+/>
+                
+<TextField
+      required
+      fullWidth
+      type="password"
+      label="Password"
+      margin="normal"
+      variant="outlined"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <LockIcon />
+          </InputAdornment>
+        ),
+      }}
+      sx={{
+        borderRadius: '8px',
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: 'rgba(255, 255, 255, 0.2)',
+          },
+          '&:hover fieldset': {
+            borderColor: 'rgba(255, 255, 255, 0.4)',
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: 'grey',
+          },
+          '& input': {
+        color: 'rgb(207, 207, 207)',
+      },
+          '&.Mui-focused': {
+            backgroundColor: 'rgba(0, 0, 0, 0.08)',
+            boxShadow: 'none', // remove blue glow
+          },
+          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.08)',
+          },
+        },
+        '& label': {
+          color: 'rgba(207, 207, 207, 0.6)',
+        },
+        '& label.Mui-focused': {
+          color: 'rgb(231, 229, 229)',
+        },
+      }}
+    />
             <Button 
             sx={{marginTop:"1rem",marginBottom:"1rem"}} 
             variant="contained" color="primary" type="submit" fullWidth
@@ -365,14 +522,9 @@ const Login=()=>{
 
             </form>
             </>}
-                </Grid>
-            </Grid>
-
-
-           
-        </Paper>
-
-    </Container>
+        </Grid>
+      </Grid>
+    </Box>
     )
 }
 

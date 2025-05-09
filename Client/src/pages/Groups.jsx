@@ -93,7 +93,6 @@ const Groups=()=>{
 
     const [renameGroup,isLoadingReGroupName]=useAsyncMutation(useRenameGroupMutation);
     const [removeMembers,isLoadingReMem]=useAsyncMutation(useRemoveMembersMutation);
-    const [addMembers,isLoadingAdMem]=useAsyncMutation(useAddMembersMutation);
     const [deleteGroup,deleteGrpLoading]=useAsyncMutation(useDeleteGroupMutation);
     
 
@@ -171,55 +170,51 @@ const Groups=()=>{
         renameGroup("Renaming Group",{name:groupNameUpdated,chatId:chatId})
     }
 
-    const GroupName=memo(()=>{
-        
-        return(
-            
-            <Stack
-             direction={"row"}
-             padding={"3rem"}
-            >
-                {
-                    isEdit ?(
-                        <Stack direction={"row"} spacing={"1rem"}>
-                        <TextField placeholder="Enter New Name" sx={{ color:"white",
-                            border:"3px solid white"
-                        }}
-                          value={groupNameUpdated}
-                        onChange={(e)=>setGroupNameUpdated(e.target.value)}
-                        ></TextField>
-                        <IconButton color="primary" onClick={updateGroupValue} disabled={isLoadingReGroupName}>
-                            <DoneIcon></DoneIcon>
-                        </IconButton>
-                        </Stack>
-                    ) :(
-                        
-                        <Stack direction={"row"} spacing={"1rem"}>
-                        <Typography variant="h5" color="white">{groupName}</Typography>
-                        <IconButton sx={{bgcolor:"grey",color:"purple"}} onClick={()=>setIsEdit(true)} >
-                            <Edit />
-                        </IconButton>
-                        </Stack>
-                        
-                    )
+    const GroupName = memo(({ groupNameUpdated, setGroupNameUpdated, setIsEdit, groupName, isEdit, isLoadingReGroupName, updateGroupValue }) => {
+  return (
+    <Stack direction={"row"} padding={"3rem"}>
+      {isEdit ? (
+        <Stack direction={"row"} spacing={"1rem"}>
+          <TextField
+            placeholder="Enter New Name"
+            sx={{
+              color: "white",
+              border: "3px solid white",
+              '& .MuiOutlinedInput-root': {
+                '& input': {
+                  color: 'rgb(207, 207, 207)',
                 }
+              }
+            }}
+            value={groupNameUpdated}
+            onChange={(e) => setGroupNameUpdated(e.target.value)}
+            autoFocus
+          />
+          <IconButton color="primary" onClick={updateGroupValue} disabled={isLoadingReGroupName}>
+            <DoneIcon />
+          </IconButton>
+        </Stack>
+      ) : (
+        <Stack direction={"row"} spacing={"1rem"}>
+          <Typography variant="h5" color="white">{groupName}</Typography>
+          <IconButton sx={{ bgcolor: "rgb(27, 26, 26)", color: "purple" }} onClick={() => setIsEdit(true)} >
+            <Edit />
+          </IconButton>
+        </Stack>
+      )}
+    </Stack>
+  );
+});
 
-                </Stack>
-        )
-    })
 
     const openConfirmDeleteDialog=()=>{
         setConfirmDeleteDialog(true);
         console.log("Delete the Group");
-        // return (<Suspense fallback={<div>Loading...</div>}>
-        //     
-        //   </Suspense>
-        //   )
-          }
+        
+    }
 
     const closeConfirmDeleteDialog=()=>{
         setConfirmDeleteDialog(false);
-
     }
 
     // const [isAddMember,setAddMemberDialog]=useState(false); 
@@ -247,17 +242,6 @@ const Groups=()=>{
         </Stack>
     )
 
-    const [trial,setTrial]=useState([])
-    const getdata=(d)=>{
-        setTrial(d);
-    }
-    console.log(trial)
-    // const [selectedMembers,setSelectedMembers]=useState([])
-    // const selectedMemberUi=(id)=>{
-    //     console.log("okay",id);
-    //     setSelectedMembers((prev)=>prev.includes(id)?prev.filter((f)=>f!==id):[...prev,id]);
-        
-    // }
 
     // useEffect(()=>{
     //     // setGroupName(`Group Name ${chatId}`);
@@ -299,7 +283,15 @@ const Groups=()=>{
                 <IconBtn />
                 {groupName?( 
                 <>
-                <GroupName />
+                <GroupName 
+                    groupNameUpdated={groupNameUpdated}
+                    setGroupNameUpdated={setGroupNameUpdated}
+                    groupName={groupName}
+                    isEdit={isEdit}
+                    isLoadingReGroupName={isLoadingReGroupName}
+                    updateGroupValue={updateGroupValue}
+                    setIsEdit={setIsEdit}
+                />
                 <Typography margin={"2rem"} variant="h4" color="#5852D6" >Members</Typography>
                 
                 <Stack

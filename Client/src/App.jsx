@@ -52,7 +52,7 @@ function App() {
         <Route path="/groups" element={<Groups />} />
       </Route>
 
-        <Route path='/a' element={<AuthPage />} />
+        {/* <Route path='/a' element={<AuthPage />} /> */}
 
         <Route path="/login" element={
           <ProtectRoute user={!user} redirect="/">

@@ -46,7 +46,8 @@ const Add=()=>{
     console.log(selectedMembers)
     return(
             <Dialog open={isNewGroup} onClose={closeHandler}  sx={{
-                "& .MuiPaper-root": { backgroundColor: "#191D1D", color: "#fff" },}} >
+                "& .MuiPaper-root": { backgroundColor: "#191D1D", color: "#fff",border:'1px solid rgb(65, 64, 64)',borderRadius:'10px' },
+                }} >
                 <DialogTitle textAlign={"center"} >
                 <Stack direction={"column"} alignItems={"center"} maxWidth={"25rem"} >
         

@@ -35,7 +35,7 @@ const Search=()=>{
     return(    
         <Stack direction={"column"} alignItems={"center"}  >
         <Dialog open={isSearch} onClose={()=>dispatch(setIsSearch(false))}   sx={{
-        "& .MuiPaper-root": { backgroundColor: "#191D1D", color: "#fff" },
+        "& .MuiPaper-root": { backgroundColor: "#191D1D", color: "#fff",border:'1px solid rgb(65, 64, 64)',borderRadius:'10px'},
       }} >
             <DialogTitle  textAlign={"center"}>
                 <Typography variant="h6">Search People</Typography>
