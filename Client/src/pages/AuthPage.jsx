@@ -1,125 +1,147 @@
-import { Container, Paper, Typography ,TextField,Button, Avatar,Stack, IconButton, Grid, InputAdornment} from "@mui/material"
-import { useState } from "react";
-import {CameraAlt as CameraAltIcon,Lock as LockIcon,AccountCircle } from "@mui/icons-material"
-import {VisuallyHiddenInput} from "../components/styled/StyleComponents"
-import axios from "axios";
-import { server } from "../components/constants/config";
-import { useDispatch } from "react-redux";
-import { userExists } from "../redux/reducers/auth";
-import toast from "react-hot-toast";
-import LoginImage from '../assets/LoginImage.jpg';
+import React, { useState } from 'react';
+import {
+  Box,
+  Button,
+  Avatar,
+  Typography,
+  TextField,
+  IconButton,
+  Grid,
+  useMediaQuery,
+  useTheme,
+  InputAdornment
+} from '@mui/material';
+import {Lock as LockIcon,ArrowBack as ArrowBackIcon,AccountCircle} from '@mui/icons-material'
+import LoginImage from '../assets/LoginImage.jpg'
+import BatmanImage from '../assets/Batman.jpeg'
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
-const Login=()=>{
-    
-    const dispatch=useDispatch();
+const AuthPage=()=>{
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  
     const [Login,setLogin]=useState(true);
-    const [image, setImage] = useState(null);
     const [username,setUsername]=useState("");
     const [password,setPassword]=useState("");
-    const [name,setName]=useState("");
-    const [bio,setBio]=useState("");
-    const [file,setFile]=useState(null)
     
-
     const toggleLogin=()=>{
         setLogin(!Login);
     }
 
-    const handleImageChange=(e)=>{
-        const selectedfile=e.target.files[0];
-        console.log(e.target.files)
-        console.log(selectedfile)
-        if(selectedfile){
-            setImage(URL.createObjectURL(selectedfile));
-            console.log(URL.createObjectURL(selectedfile))
-            setFile(selectedfile)
-        }
-    }
-
+    
     const handleLogin=async(e)=>{
-        e.preventDefault();
-        console.log(username);
-        console.log(password);
-       
-        const config={
-            withCredentials:true,
-            headers:{
-                "Content-Type":"application/json",
+            e.preventDefault();
+            console.log(username);
+            console.log(password);
+           
+            const config={
+                withCredentials:true,
+                headers:{
+                    "Content-Type":"application/json",
+                }
+            }   
+    
+            try {
+                const {data} =await axios.post(`${server}/user/login`,{
+                    username:username,
+                    password:password
+                    },config);
+                dispatch(userExists(true))
+                toast.success(data.message)
+            } catch (error) {
+                toast.error(error?.response?.data?.message || "Something Went Wrong")
             }
-        }   
-
-        try {
-            const {data} =await axios.post(`${server}/user/login`,{
-                username:username,
-                password:password
-                },config);
-            dispatch(userExists(true))
-            toast.success(data.message)
-        } catch (error) {
-            toast.error(error?.response?.data?.message || "Something Went Wrong")
-        }
-        
-    }
-
-    const handleRegister=async(e)=>{
-        e.preventDefault();
-        
-        const frmData=new FormData();
-        frmData.append("name",name);
-        frmData.append("bio",bio);
-        frmData.append("username",username);
-        frmData.append("password",password);
-       frmData.append("avatar",file);
-
-        const config=({
-            withCredentials:true,
-            headers:{
-                "Content-Type":"multipart/form-data"
-            }
-        })
-        try {
-            const {data}=await axios.post(`${server}/user/new`,frmData,config)
-            dispatch(userExists(true))
-            toast.success(data.message)
-        } catch (error) {
-            toast.error(error?.response?.data?.message || "Something Went Wrong")          
-        }
-    }
-
-
-    return(    
-    <Container component={"main"}  sx={{
-        height:"100vh",
-        width:'100vw',
-        display:"flex",
-        justifyContent:"center",
-        alignItems:"center",
-        background: "linear-gradient(to-bottom,#121212,rgb(63, 63, 63))", // semi-transparent dark
-    backdropFilter: "blur(8px)", // blur effect
-    WebkitBackdropFilter: "blur(8px)", // for Safari support
-    }}>
-        <Paper
             
-            elevation={16}
+        }
+    
+    return(
+    <Box
+      sx={{
+        height: '100vh',
+        background: 'linear-gradient(to bottom, #121212, #1e1e1e)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+        color: '#fff',
+        padding: isMobile ? 3 : 0, // Add padding for better mobile view
+      }}
+    >
+         <Grid container spacing={0} sx={{  width: '100%',height:'100%',alignItems:'center'}}>
+        {/* Right Panel (Character + Chat Bubbles) */}
+        <Grid item sm={6} sx={{
+             display: {xs:'none',sm:'flex'}, justifyContent: 'center', alignItems: 'center',
+             position: 'relative',
+             overflow: 'hidden',
+             height: '100%',
+             }}> {/* Added overflow: 'hidden' for potential clipping */}
+  {/* <Box
+    sx={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      background: 'linear-gradient(to bottom, rgba(18, 18, 18, 0.5), rgba(30, 30, 30, 0.5))', // Subtle dark gradient overlay
+      zIndex: 1, // Ensure it's above the image
+      opacity: 0.6, // Adjust opacity for the blending effect
+    }}
+  /> */}
+  <img
+    src={BatmanImage}
+    alt="Character"
+    style={{
+      width: '80%',
+      height:'100%',
+      objectFit: 'contain',
+      zIndex: 2, // Ensure the image is above the overlay
+      mixBlendMode: 'darken', // Experiment with blending modes
+      opacity: 0.7, // Adjust image opacity if needed
+      
+    }}
+  />
+          {/* <Box
             sx={{
-                padding:0,
-                display:"flex",
-                flexDirection:"column",
-                alignItems:"center",
-                bgcolor:"#191D1D",
-                color:"white",
-                border:'1px solid rgba(112, 112, 112, 0.38)',
-              borderRadius:'12px',
-                // boxShadow: '1px 8px 18px rgb(14, 202, 235)'
+              position: 'absolute',
+              top: isMobile ? '10%' : '25%',
+              right: isMobile ? '5%' : '10%',
+              background: '#333',
+              p: 2,
+              borderRadius: 2,
+              boxShadow: 4,
+              maxWidth: '40%', // Control width on smaller screens
             }}
-        >
+          >
+            <Typography variant="body2">
+              <strong>Retr0:</strong> Dreamed to play. Thank you a lot!
+            </Typography>
+            <Typography variant="caption">5m ago</Typography>
+          </Box>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: isMobile ? '35%' : '45%',
+              left: isMobile ? '5%' : 'auto',
+              right: isMobile ? 'auto' : '5%',
+              background: '#444',
+              p: 2,
+              borderRadius: 2,
+              boxShadow: 4,
+              maxWidth: '40%', // Control width on smaller screens
+            }}
+          >
+            <Typography variant="body2">
+              <strong>Dedsec (Support):</strong> You are welcome! Enjoy!
+            </Typography>
+            <Typography variant="caption">25m ago</Typography>
+          </Box> */}
+        </Grid>
 
-            <Grid container height={'100%'} width={'100%'} spacing={2}>
-                <Grid item sm={6} sx={{display:{xs:'none',sm:'block'}}}>
-                    <img src={LoginImage} height={'100%'} width={'100%'} style={{borderRadius:'20px'}} />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                {Login ? (
+        {/* Left Panel */}
+        <Grid item xs={12} sm={6} sx={{ p:3, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        {Login ? (
                 <>
                 <Typography  variant="button" fontSize={{xs:'35px',sm:'50px'}} >Login</Typography>
                 <form style={{
@@ -365,15 +387,9 @@ const Login=()=>{
 
             </form>
             </>}
-                </Grid>
-            </Grid>
-
-
-           
-        </Paper>
-
-    </Container>
+        </Grid>
+      </Grid>
+    </Box>
     )
 }
-
-export default Login;
+export default AuthPage
