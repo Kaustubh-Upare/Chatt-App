@@ -1,35 +1,33 @@
-import { Container, Paper, Typography ,TextField,Button, Avatar,Stack, 
-    IconButton, Grid, InputAdornment,Box,
-    useTheme,
-    useMediaQuery} from "@mui/material"
-import { useState } from "react";
-import {CameraAlt,Lock as LockIcon,AccountCircle,Description as DescIcon } from "@mui/icons-material"
-import {VisuallyHiddenInput} from "../components/styled/StyleComponents"
-import axios from "axios";
-import { server } from "../components/constants/config";
-import { useDispatch } from "react-redux";
-import { userExists } from "../redux/reducers/auth";
-import toast from "react-hot-toast";
-import LoginImage from '../assets/LoginImage.jpg';
+import React, { useState } from 'react';
+import {
+  Box,
+  Button,
+  Avatar,
+  Typography,
+  TextField,
+  IconButton,
+  Grid,
+  useMediaQuery,
+  useTheme,
+  InputAdornment,
+  Stack
+} from '@mui/material';
+import {Lock as LockIcon,ArrowBack as ArrowBackIcon,AccountCircle, CameraAlt,Description as DescIcon} from '@mui/icons-material'
+import LoginImage from '../assets/LoginImage.jpg'
+import BatmanImage from '../assets/Batman.jpeg'
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { VisuallyHiddenInput } from '../components/styled/StyleComponents';
 
-const Login=()=>{
-    
+const AuthPage=()=>{
     const theme = useTheme();
-        const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-      
-    const dispatch=useDispatch();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  
     const [Login,setLogin]=useState(true);
-    const [image, setImage] = useState(null);
     const [username,setUsername]=useState("");
     const [password,setPassword]=useState("");
-    const [name,setName]=useState("");
+    const [image, setImage] = useState(null);
     const [bio,setBio]=useState("");
-    const [file,setFile]=useState(null)
-    const [isLoading,setIsLoading]=useState(false);
-
-    const toggleLogin=()=>{
-        setLogin(!Login);
-    }
 
     const handleImageChange=(e)=>{
         const selectedfile=e.target.files[0];
@@ -41,66 +39,64 @@ const Login=()=>{
             setFile(selectedfile)
         }
     }
-
-    const handleLogin=async(e)=>{
-        e.preventDefault();
-        console.log(username);
-        console.log(password);
-       setIsLoading(true);
-        const config={
-            withCredentials:true,
-            headers:{
-                "Content-Type":"application/json",
-            }
-        }   
-        const toasId=toast.loading('Logging you...');
-        try {
-            const {data} =await axios.post(`${server}/user/login`,{
-                username:username,
-                password:password
-                },config);
-            dispatch(userExists(true))
-            toast.success(data.message,{id:toasId})
+     const handleRegister=async(e)=>{
+            e.preventDefault();
             
-        } catch (error) {
-            toast.error(error?.response?.data?.message || "Something Went Wrong",{id:toasId})
-        }finally{
-            setIsLoading(false);
-        }
-        
-    }
-
-    const handleRegister=async(e)=>{
-        e.preventDefault();
-        setIsLoading(true);
-        const toastId=toast.loading('Great Things Take Time King...');
-        const frmData=new FormData();
-        frmData.append("name",name);
-        frmData.append("bio",bio);
-        frmData.append("username",username);
-        frmData.append("password",password);
-       frmData.append("avatar",file);
-
-        const config=({
-            withCredentials:true,
-            headers:{
-                "Content-Type":"multipart/form-data"
+            const frmData=new FormData();
+            frmData.append("name",name);
+            frmData.append("bio",bio);
+            frmData.append("username",username);
+            frmData.append("password",password);
+           frmData.append("avatar",file);
+    
+            const config=({
+                withCredentials:true,
+                headers:{
+                    "Content-Type":"multipart/form-data"
+                }
+            })
+            try {
+                const {data}=await axios.post(`${server}/user/new`,frmData,config)
+                dispatch(userExists(true))
+                toast.success(data.message)
+            } catch (error) {
+                toast.error(error?.response?.data?.message || "Something Went Wrong")          
             }
-        })
-        try {
-            const {data}=await axios.post(`${server}/user/new`,frmData,config)
-            dispatch(userExists(true))
-            toast.success(data.message,{id:toastId})
-        } catch (error) {
-            toast.error(error?.response?.data?.message || "Something Went Wrong",{id:toastId})          
-        }finally{
-            setIsLoading(false);
         }
+    
+
+    const toggleLogin=()=>{
+        setLogin(!Login);
     }
 
-
-    return(    
-<Box
+    
+    const handleLogin=async(e)=>{
+            e.preventDefault();
+            console.log(username);
+            console.log(password);
+           
+            const config={
+                withCredentials:true,
+                headers:{
+                    "Content-Type":"application/json",
+                }
+            }   
+    
+            try {
+                const {data} =await axios.post(`${server}/user/login`,{
+                    username:username,
+                    password:password
+                    },config);
+                dispatch(userExists(true))
+                toast.success(data.message)
+            } catch (error) {
+                toast.error(error?.response?.data?.message || "Something Went Wrong")
+            }
+            
+        }
+    
+    return(
+    <Box
       sx={{
         height: '100vh',
         background: 'linear-gradient(to bottom, #121212, #1e1e1e)',
@@ -163,7 +159,6 @@ const Login=()=>{
       </InputAdornment>
     ),
   }}
-
   sx={{
     borderRadius: '8px',
     '& .MuiOutlinedInput-root': {
@@ -183,9 +178,6 @@ const Login=()=>{
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
       '&:hover': {
         backgroundColor: 'rgba(0, 0, 0, 0.08)',
-      },
-      '& input': {
-        color: 'rgb(207, 207, 207)',
       },
     },
     '& label': {
@@ -222,9 +214,6 @@ const Login=()=>{
           '&:hover fieldset': {
             borderColor: 'rgba(255, 255, 255, 0.4)',
           },
-          '& input': {
-        color: 'rgb(207, 207, 207)',
-      },
           '&.Mui-focused fieldset': {
             borderColor: 'grey',
           },
@@ -337,9 +326,6 @@ const Login=()=>{
       '&.Mui-focused fieldset': {
         borderColor: 'grey',
       },
-      '& input': {
-        color: 'rgb(207, 207, 207)',
-      },
       '&.Mui-focused': {
         backgroundColor: 'rgba(0, 0, 0, 0.08)',
         boxShadow: 'none', // remove blue glow
@@ -381,9 +367,6 @@ const Login=()=>{
       },
       '&:hover fieldset': {
         borderColor: 'rgba(255, 255, 255, 0.4)',
-      },
-      '& input': {
-        color: 'rgb(207, 207, 207)',
       },
       '&.Mui-focused fieldset': {
         borderColor: 'grey',
@@ -435,9 +418,6 @@ const Login=()=>{
       '&.Mui-focused fieldset': {
         borderColor: 'grey',
       },
-      '& input': {
-        color: 'rgb(207, 207, 207)',
-      },
       '&.Mui-focused': {
         backgroundColor: 'rgba(0, 0, 0, 0.08)',
         boxShadow: 'none', // remove blue glow
@@ -484,9 +464,6 @@ const Login=()=>{
           '&.Mui-focused fieldset': {
             borderColor: 'grey',
           },
-          '& input': {
-        color: 'rgb(207, 207, 207)',
-      },
           '&.Mui-focused': {
             backgroundColor: 'rgba(0, 0, 0, 0.08)',
             boxShadow: 'none', // remove blue glow
@@ -527,5 +504,4 @@ const Login=()=>{
     </Box>
     )
 }
-
-export default Login;
+export default AuthPage

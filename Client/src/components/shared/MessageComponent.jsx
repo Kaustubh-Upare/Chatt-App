@@ -6,17 +6,21 @@ import {motion} from 'framer-motion'
 
 const MessageComponent =({message,user,setPage,reff,index,totalPages,page})=>{
     
-    console.log("induu",index)
+    console.log("induu",reff)
+    console.log('totalll',totalPages)
     useEffect(()=>{
-        if(!reff || totalPages===1) return;
+        if(!reff || !reff.current || totalPages===1) return;
 
         const observer=new IntersectionObserver((param)=>{
             console.log("inside induu",index)
+            // console.log('bhutanii ket',param)
             if(param[0].isIntersecting && page<totalPages){
                 console.log("reference msg component");
                 setPage((p)=>p+1);
+                window.scrollTo({ top: window.scrollY, behavior: "auto" });
             }
         });
+
         if(reff){
             observer?.observe(reff.current)
         }
@@ -24,16 +28,16 @@ const MessageComponent =({message,user,setPage,reff,index,totalPages,page})=>{
         return ()=> {
             if (reff && reff.current){
                 console.log("madarbh")
-                observer?.unobserve(reff.current);
+                observer.unobserve(reff.current);
             }
         }
 
-    },[reff,totalPages])
+    },[reff,totalPages,page])
 
 
     const {sender,content,attachments=[],createdAt}=message;
     
-    const sameSender=sender._id===user?.data?.data;
+    const sameSender=sender._id===user;
     
     return(
         <motion.div

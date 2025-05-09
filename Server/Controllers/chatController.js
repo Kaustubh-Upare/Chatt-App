@@ -38,7 +38,7 @@ const getMyChat=tryCatcher(async (req,res,next)=>{
         "members",
         "name avatar"
     );
-    console.log(u);
+    // console.log(u);
     
     const transformedChats= u.map(({_id,name,members,groupChat})=>{
         const otherMember=getotherMember(members,req.user)
@@ -176,10 +176,10 @@ const leaveGroup=tryCatcher(async(req,res,next)=>{
 
 const sendAttachments=tryCatcher(async(req,res,next)=>{
     console.log("server bby")
-    console.log(req.body)
+    // console.log(req.body)
     const {chatId}= req.body;
-    console.log("server bby2")
-    console.log(chatId)
+    // console.log("server bby2")
+    // console.log(chatId)
     
     const [chatu,me]= await Promise.all([
         Chat.findById(chatId),
@@ -187,7 +187,7 @@ const sendAttachments=tryCatcher(async(req,res,next)=>{
     ])
     if(!chatu) return next(new ErrorHandler("Chat Not Found",401));
     const files=req.files || [];
-    console.log(files)
+    // console.log(files)
     console.log("Clooooooouddddiiiiiinaaary")
     
     
@@ -224,7 +224,7 @@ const sendAttachments=tryCatcher(async(req,res,next)=>{
 const getChatDetails=tryCatcher(async(req,res,next)=>{
 
     if(req.query.populate==='true'){
-        console.log("populate")
+        // console.log("populate")
         const chatu=await Chat.findById(req.params.id).populate('members','name avatar').lean()
     
         if(!chatu) return next(new ErrorHandler("Chat Not Found",401));

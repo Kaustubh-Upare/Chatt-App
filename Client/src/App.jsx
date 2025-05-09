@@ -11,6 +11,7 @@ import { userExists, userNotExists } from "./redux/reducers/auth";
 import {Toaster} from "react-hot-toast"
 import { useGetNotificationsQuery } from "./redux/api/api";
 import { SocketProvider } from "./Socket";
+import AuthPage from "./pages/AuthPage";
 
 const Home=lazy(()=> import("./pages/Home"));
 const Login=lazy(()=> import("./pages/Login"))
@@ -50,6 +51,8 @@ function App() {
         <Route path="/chats/:id" element={<ChatsGroup />} />
         <Route path="/groups" element={<Groups />} />
       </Route>
+
+        {/* <Route path='/a' element={<AuthPage />} /> */}
 
         <Route path="/login" element={
           <ProtectRoute user={!user} redirect="/">

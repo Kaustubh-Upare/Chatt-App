@@ -48,10 +48,10 @@ const login=tryCatcher(async (req,res,next)=>{
         if(!u) return next(new ErrorHandler("Invalid Username",400));
 
         
-    // const isMatch=await compare(password,u.password);
-    // console.log(isMatch);
+    const isMatch=await compare(password,u.password);
+    console.log(isMatch);
 
-    // if(!isMatch) return next(new Error("Invalid Password"));
+    if(!isMatch) return next(new Error("Invalid Password"));
     
     sendToken(res,u,201,"Welcome Back");
 
@@ -82,7 +82,8 @@ const logout=tryCatcher(async(req,res,next)=>{
     secure:true
     }
     
-    return res.status(201).cookie("Chat-Token","",cookieOption).json({
+    
+    return res.status(201).cookie("Chat-Token","",{...cookieOption}).json({
         success:true,
         message:"Logout Succesfully",   
         data:req.user

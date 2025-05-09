@@ -9,6 +9,7 @@ import { useAvailableFriendsQuery, useCNewGroupMutation } from "../../redux/api/
 import { setIsNewGroup } from "../../redux/reducers/misc";
 import toast from "react-hot-toast";
 import { useAsyncMutation } from "../../hooks/hook";
+import UserAddMemberItem from "../shared/UserAddMemberItem";
 const Add=()=>{
     const dispatch=useDispatch();
     const {isNewGroup}=useSelector((state)=>state.misc)
@@ -45,7 +46,8 @@ const Add=()=>{
     console.log(selectedMembers)
     return(
             <Dialog open={isNewGroup} onClose={closeHandler}  sx={{
-                "& .MuiPaper-root": { backgroundColor: "#191D1D", color: "#fff" },}} >
+                "& .MuiPaper-root": { backgroundColor: "#191D1D", color: "#fff",border:'1px solid rgb(65, 64, 64)',borderRadius:'10px' },
+                }} >
                 <DialogTitle textAlign={"center"} >
                 <Stack direction={"column"} alignItems={"center"} maxWidth={"25rem"} >
         
@@ -67,7 +69,7 @@ const Add=()=>{
                 { 
                 isLoading?<Skeleton />
                 :(data?.ff.map((user)=>(
-                        <UserAddGroupItem selectedMemberUi={selectedMemberUi} selectedMembers={selectedMembers}
+                        <UserAddMemberItem selectedMemberUi={selectedMemberUi} selectedMembers={selectedMembers}
                         user={user}
                         key={user._id} 
                         isAdded={false}
@@ -76,7 +78,7 @@ const Add=()=>{
                     <Stack direction={"row"} justifyContent={"space-evenly"}>
                 <Button variant="outlined" onClick={createHandler} disabled={newGroupLoading} >Create</Button>
                 <Tooltip title="Cancel">
-                <Button color="error" variant="outlined"><CancelIcon /></Button>
+                <Button color="error" variant="outlined" onClick={()=> dispatch(setIsNewGroup(false))} ><CancelIcon /></Button>
                 </Tooltip>
             </Stack>
                 </List>

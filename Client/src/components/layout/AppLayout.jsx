@@ -82,11 +82,20 @@ const AppLayout=()=>WrappedComponent =>{
                 {isLoading ? (
                     <Skeleton />
                 ) : (
-                <Drawer open={isMobileMenu} onClose={handleMobileMenu} >
+                <Drawer open={isMobileMenu} onClose={handleMobileMenu}
+                
+                PaperProps={{
+                    sx: {
+                      backgroundColor: "#191D1D", // change this to your desired color
+                      color: "white", // optional: change text color too
+                    },
+                  }}
+                >
                     <ChatList  chats={data?.chats} chatId={chatId} 
                     newMessagesAlert={newMsgAlert} 
                     onlineUsers={onlineUsers} 
                     w={"50vw"}
+                    
                     />
                 </Drawer>
                     )
